@@ -1,0 +1,95 @@
+/* Importation de la police Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;500&display=swap');
+
+/* Container principal de la section Welcome */
+.welcome-container {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 70vh; /* Ajustement de la hauteur pour éviter le chevauchement avec le footer */
+    background-color: #f9f9f9; /* Couleur de fond douce */
+}
+
+/* Style du titre */
+.welcome-container h2 {
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Liste des babysitters */
+.babysitter-list {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap; /* Permet aux éléments de revenir à la ligne si nécessaire */
+    margin-top: 15px;
+}
+
+/* Carte de chaque babysitter */
+.babysitter-card {
+    width: 160px; /* Réduction de la largeur */
+    padding: 15px; /* Réduction de l'espace interne */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; /* Espacement entre l'image et le texte */
+}
+
+/* Effet de survol */
+.babysitter-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Image des babysitters */
+.babysitter-image {
+    width: 110px; /* Taille réduite */
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+/* Nom de la babysitter */
+.babysitter-card h3 {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    font-size: 1rem; /* Réduction de la taille */
+    font-weight: 500;
+    color: #333;
+    text-transform: capitalize;
+}
+
+/* Description de la babysitter */
+.babysitter-card p {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem; /* Réduction de la taille */
+    font-weight: 400;
+    color: #555;
+    line-height: 1.4;
+    text-align: center;
+}
+
+
+
+
+
+
+  
+  
+  
+  
+  

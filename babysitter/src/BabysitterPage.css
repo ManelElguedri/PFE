@@ -1,0 +1,126 @@
+/* Conteneur principal */
+.parent-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Barre latérale */
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-video {
+  width: 80%;
+  border-radius: 10px;
+}
+
+/* Menu */
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color:#dfe6e9 ;
+}
+
+.menu-item:hover {
+  background-color: #dfe6e9;
+}
+
+.menu-item svg {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+/* Contenu principal */
+.main-content {
+  flex: 1;
+  background-color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* En-tête */
+.header {
+  padding: 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.greeting-container {
+  display: flex;
+  align-items: center;
+}
+
+.greeting {
+  font-size: 18px;
+  margin-left: 10px;
+  color: #ffffff;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Icônes à droite de l'en-tête */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-wrapper {
+  position: relative;
+  font-size: 20px;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.icon-wrapper img.user-avatar {
+  width: 36px;
+  height: 36px;
+}
+
+/* Pastille rouge notification */
+.notification-icon .dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+/* Section de contenu */
+.section-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+  

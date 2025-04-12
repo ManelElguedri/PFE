@@ -1,0 +1,140 @@
+/* Header stil düzenlemeleri */
+.header-main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    /* Arka plan rengini değiştirebilirsiniz */
+}
+
+/* Vidéo du logo */
+.header-logo-video {
+    max-width: 200px;  /* Limite la taille du logo vidéo */
+    width: 100%;       /* Adapte la largeur de la vidéo à la taille de son conteneur */
+    height: auto;      /* Garde les proportions de la vidéo */
+    object-fit: contain; /* S'assure que la vidéo est bien contenue sans déformation */
+  }
+  
+
+#header-nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 0 50px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 21px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #007BFF;
+    /* Hover rengini değiştirebilirsiniz */
+}
+
+/* Join us kısmı */
+#header-join-us a {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#header-join-us a:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+    .header-main-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+}
+
+/* Sosyal medya ikonları stil düzenlemeleri */
+#header-social-media {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.social-media-icons {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.social-media-icons li {
+    margin: 0 15px;
+}
+
+.social-media-icons a {
+    text-decoration: none;
+    font-size: 24px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.social-media-icons a:hover {
+    color: #007BFF;
+    /* Hover rengini değiştirebilirsiniz */
+}
+
+/* Daha küçük ekranlar için responsive tasarım */
+@media (max-width: 768px) {
+    .social-media-icons li {
+        margin: 0 10px;
+    }
+
+    .social-media-icons a {
+        font-size: 20px;
+    }
+}
+
+
+.auth-buttons li {
+    display: inline;
+    margin-left: 10px;
+}
+
+.SignIn-btn,
+.SignUp-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    /* Yeşil butonlar */
+    color: white;
+    border-radius: 5px;
+}
+
+.SignIn-btn:hover,
+.SignUp-btn:hover {
+    background-color: #45a049;
+}

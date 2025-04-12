@@ -1,0 +1,99 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaHome, FaUser, FaBell, FaEnvelope, FaUsers } from "react-icons/fa";
+import "./ParentPage.css";
+import MessageSection from "./MessageSection";
+import NotificationSection from "./NotificationSection";
+import ProfileParent from "./ProfileParent";
+import AnnoucementSection from "./AnnoucementSection";
+import WelcomeSection from "./WelcomeSection";
+import BabysitterProfile from "./BabysitterProfile";
+import CandidatureResponses from "./CandidatureResponses"; // Section candidatures
+
+function ParentPage() {
+  const [activeSection, setActiveSection] = useState("welcome");
+  const [selectedBabysitter, setSelectedBabysitter] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    if (!isAuthenticated) {
+      navigate("/signin");
+    }
+  }, [navigate]);
+
+  const handleMenuClick = (section) => {
+    setActiveSection(section);
+    setSelectedBabysitter(null); // Réinitialise le profil affiché si un babysitter est sélectionné
+  };
+
+  return (
+    <div className="parent-container">
+      <aside className="sidebar">
+        <div className="logo-container">
+          <video src="/logo1.mp4" className="logo-video" autoPlay loop muted />
+        </div>
+        <nav>
+          <ul className="menu">
+            <li className="menu-item" onClick={() => handleMenuClick("welcome")}>
+              <FaHome />
+              <span>Welcome</span>
+            </li>
+            <li className="menu-item" onClick={() => handleMenuClick("profile")}>
+              <FaUser />
+              <span>My profile</span>
+            </li>
+            <li className="menu-item" onClick={() => handleMenuClick("announcements")}>
+              <FaUsers />
+              <span>Announcements</span>
+            </li>
+            <li className="menu-item" onClick={() => handleMenuClick("notifications")}>
+              <FaBell />
+              <span>Notifications</span>
+            </li>
+            <li className="menu-item" onClick={() => handleMenuClick("messages")}>
+              <FaEnvelope />
+              <span>Messages</span>
+            </li>
+            <li className="menu-item" onClick={() => handleMenuClick("candidatures")}>
+              <FaUsers />
+              <span>Applications</span>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main className="main-content">
+        <header className="header">
+          <div className="greeting">
+            Good Morning Parent <span className="user-name"></span>
+          </div>
+        </header>
+
+        <section className="section-content">
+          {selectedBabysitter ? (
+            <BabysitterProfile 
+              selectedBabysitter={selectedBabysitter} 
+              onClose={() => setSelectedBabysitter(null)} 
+            />
+          ) : (
+            <>
+              {activeSection === "welcome" && (
+                <WelcomeSection onSelectBabysitter={setSelectedBabysitter} />
+              )}
+              {activeSection === "profile" && <ProfileParent />}
+              {activeSection === "messages" && <MessageSection />}
+              {activeSection === "notifications" && <NotificationSection />}
+              {activeSection === "announcements" && <AnnoucementSection />}
+              {activeSection === "candidatures" && <CandidatureResponses />}
+            </>
+          )}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default ParentPage;
+
+

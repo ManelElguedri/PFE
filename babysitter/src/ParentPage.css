@@ -1,0 +1,329 @@
+/* Styles pour le conteneur principal */
+.parent-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #c71585; /* Rose foncé proche du violet (Medium Violet Red) */
+    color: white;
+    padding: 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-video {
+    height: 60px;
+    margin-right: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Menu */
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-item {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative; /* Permet de positionner le badge */
+}
+
+/* Badge de notification */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Modification de l'icône au survol */
+.menu-item:hover {
+    background-color: #b31375; /* Rose encore plus foncé au survol */
+}
+
+.menu-item svg {
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+}
+
+/* Main content styles */
+.main-content {
+    flex: 1;
+    background-color: #f8e8f3; /* Rose pâle pour un fond doux */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+}
+
+.greeting {
+    background-color: #c71585; /* Rose foncé proche du violet */
+    color: white;
+    padding: 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.user-name {
+    font-weight: normal;
+}
+
+/* Profile section */
+.profile-section {
+    padding: 25px;
+    background-color: white;
+    flex: 1;
+    font-size: 18px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 12px;
+    font-size: 18px;
+}
+
+/* Bouton stylisé en rose foncé */
+.modify-btn {
+    padding: 12px 20px;
+    background-color: #c71585; /* Rose foncé tirant vers le violet */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modify-btn:hover {
+    background-color: #b31375; /* Rose encore plus foncé au survol */
+    transform: translateY(-2px);
+    box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.modify-btn:active {
+    background-color: #9c0f65; /* Teinte encore plus foncée lors du clic */
+    transform: translateY(1px);
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Message section styles */
+.message-section {
+    padding: 20px;
+    background-color: white;
+    flex: 1;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Conteneur des messages */
+.message-container {
+    max-height: 250px; /* Ajuste la hauteur des messages pour permettre plus de place */
+    overflow-y: auto;
+    margin-bottom: 20px; /* Ajoute un espace entre les messages et le champ de saisie */
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    flex-grow: 1; /* Permet au conteneur des messages de s'étendre */
+}
+
+/* Style pour chaque message */
+.message {
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #f8e8f3;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message strong {
+    color: #c71585; /* Rose foncé pour les noms des expéditeurs */
+}
+
+/* Champ de saisie du message */
+textarea {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: none;
+    margin-bottom: 10px; /* Ajoute de l'espace sous le champ de saisie */
+}
+
+/* Bouton pour envoyer le message */
+button {
+    padding: 5px 10px; /* Réduit encore plus le padding pour un bouton plus petit */
+    background-color: #c71585;
+    color: white;
+    border: none;
+    border-radius: 6px; /* Bordure arrondie mais plus petite */
+    cursor: pointer;
+    font-size: 14px; /* Taille de la police réduite */
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 8px; /* Espace entre le champ de saisie et le bouton */
+    width: auto; /* La largeur s'ajuste au contenu */
+    min-width: 80px; /* Définir une largeur minimale mais plus petite */
+    text-align: center; /* Centrer le texte à l'intérieur */
+}
+
+button:hover {
+    background-color: #b31375;
+    transform: translateY(-1px);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    background-color: #9c0f65;
+    transform: translateY(1px);
+    box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Amélioration du style de la section notifications */
+.notification-section {
+  padding: 20px;
+  background-color: white;
+  flex: 1;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  line-height: 0.2; /* Augmente l'interligne pour une meilleure lisibilité */
+  font-family: 'Roboto', sans-serif; /* Police moderne et élégante */
+}
+
+/* Amélioration du titre de la section */
+.notification-section h2 {
+  font-size: 26px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 1px; /* Ajoute un léger espacement entre les lettres */
+  font-family: 'Poppins', sans-serif; /* Police plus élégante et moderne */
+}
+
+/* Style général du tableau */
+.notification-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.notification-table th, .notification-table td {
+  padding: 16px;
+  text-align: left;
+  font-size: 17px;
+  color: #555;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Style des en-têtes du tableau */
+.notification-table th {
+  background-color: #c71585;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  font-size: 15px;
+  text-align: center;
+  border-bottom: 2px solid #a62d7b; /* Bordure subtile pour les en-têtes */
+}
+
+/* Style des cellules du tableau */
+.notification-table td {
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Style des lignes paires pour une meilleure lisibilité */
+.notification-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.notification-table tr:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Réduction du texte des dates */
+.notification-table td:last-child {
+  font-style: italic;
+  color: #888;
+  font-size: 15px;
+}
+
+/* Texte des titres et éléments principaux plus distincts */
+.notification-table td:first-child {
+  font-weight: 600;
+  font-size: 16px;
+  color: #444;
+}
+
+/* Espacement entre les lignes du tableau */
+.notification-table tr {
+  margin-bottom: 12px;
+}
+
+/* Amélioration des effets de survol des lignes */
+.notification-table tr:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  background-color: #e6e6e6;
+}

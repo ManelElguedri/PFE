@@ -1,0 +1,114 @@
+/* Footer container */
+footer {
+    background-color: #062340;
+    color: #ecf0f1;
+    padding: 20px 0; /* Réduit le padding */
+    font-family: Arial, sans-serif;
+}
+
+/* Footer second layer */
+.footerSecondLayerConteiner {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px; /* Réduit le padding */
+}
+
+/* Footer Menu */
+.footerMenu ul,
+.footerContact ul,
+.footerSocial ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footerMenu li,
+.footerContact li,
+.footerSocial li {
+    margin: 5px 0; /* Réduit la marge entre les éléments */
+    font-size: 14px; /* Réduit la taille de la police */
+    cursor: pointer;
+}
+
+/* Suppression de la ligne sous le texte "About" */
+.footerMenu li:first-child {
+    font-size: 20px; /* Taille plus petite */
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ecf0f1;
+    display: inline-block;
+    padding-bottom: 3px; /* Réduit l'espacement */
+}
+
+/* Footer Contact Section */
+.footerContact {
+    display: flex;
+    flex-direction: column;
+}
+
+.footerContact li {
+    font-size: 16px; /* Taille réduite */
+}
+
+/* Footer Social Section */
+.footerSocial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style des icônes sociales */
+.footerSocial ul {
+    display: flex;
+    gap: 15px; /* Réduit l'espacement entre les icônes */
+}
+
+.footerSocial li {
+    display: inline-block;
+}
+
+.footerSocial a {
+    color: #ecf0f1;
+    font-size: 24px; /* Taille réduite des icônes */
+    text-decoration: none;
+    transition: transform 0.3s ease-in-out;
+}
+
+.footerSocial a:hover {
+    color: #ecf0f1;
+    transform: scale(1.1); /* Réduit l'agrandissement au survol */
+}
+
+/* Footer Copyright */
+.footerCopyright {
+    text-align: center;
+    margin-top: 20px; /* Réduit la marge */
+    font-size: 16px; /* Taille de la police réduite */
+    background-color: #062340;
+    padding: 15px; /* Réduit le padding */
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+    .footerSecondLayerConteiner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footerMenu,
+    .footerContact,
+    .footerSocial {
+        margin-bottom: 10px; /* Réduit la marge */
+    }
+
+    /* Ajustement des icônes sociales sur mobile */
+    .footerSocial ul {
+        justify-content: center;
+    }
+}
+
+
+
+
+

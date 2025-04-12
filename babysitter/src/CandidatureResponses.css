@@ -1,0 +1,108 @@
+.candidature-responses {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+  }
+  
+  .candidature-responses h2 {
+    margin-bottom: 24px;
+    color: #1a202c;
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  
+  .candidature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .candidature-item {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 20px 0;
+    transition: background-color 0.2s ease;
+  }
+  
+  .candidature-item:hover {
+    background-color: #f9fafb;
+  }
+  
+  .candidature-info {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .candidature-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .accept-btn,
+  .reject-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    font-size: 0.95rem;
+  }
+  
+  .accept-btn {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .accept-btn:hover {
+    background-color: #3e8e41;
+    transform: scale(1.05);
+  }
+  
+  .reject-btn:hover {
+    background-color: #d32f2f;
+    transform: scale(1.05);
+  }
+  
+  .candidature-statut {
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 0.9rem;
+  }
+  
+  .candidature-statut.acceptée {
+    background-color: #e6f4ea;
+    color: #2e7d32;
+  }
+  
+  .candidature-statut.refusée {
+    background-color: #fdecea;
+    color: #c62828;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .candidature-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .accept-btn,
+    .reject-btn {
+      width: 100%;
+    }
+  }
+  
+  
+  

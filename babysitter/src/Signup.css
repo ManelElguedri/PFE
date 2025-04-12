@@ -1,0 +1,143 @@
+/* 🌟 Container principal */
+.signup-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🌟 Titre principal */
+.signup-container h2 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* 🌟 Formulaire */
+.signup-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center; /* Centrer les éléments */
+  width: 100%;
+}
+
+/* 🌟 Groupes de champs */
+.form-group {
+  text-align: left;
+  flex: 1 1 45%; /* Les éléments prennent 45% de la largeur */
+  min-width: 250px; /* Limiter la taille minimale */
+}
+
+/* 🌟 Labels */
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* 🌟 Champs de texte et sélections */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 🌟 Effet au focus */
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #28a745; /* Vert */
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.5);
+}
+
+/* ✅ Bouton "Sign Up" amélioré */
+button.signup-btn {
+  background: #28a745; /* Vert */
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 12px 15px;
+  font-size: 13px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  width: 100%; /* Bouton sur toute la largeur */
+}
+
+/* ✅ Effet de hover sur le bouton */
+button.signup-btn:hover {
+  background: #218838; /* Vert foncé */
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌟 Styling des images de rôle */
+.role-option {
+  display: inline-block;
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.role-option img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ✅ Effet au survol et sélection */
+.role-option:hover img,
+.role-option.selected img {
+  border-color: #28a745; /* Bordure verte */
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Styling pour le champ d'upload de photo */
+.form-group input[type="file"] {
+  border: none;
+  font-size: 14px;
+}
+
+/* 🌟 Responsive design */
+@media (max-width: 600px) {
+  .signup-container {
+      padding: 20px;
+  }
+
+  .signup-form {
+      gap: 12px;
+      flex-direction: column; /* Passer en mode colonne pour les petits écrans */
+  }
+
+  .role-option img {
+      width: 100px;
+      height: 100px;
+  }
+}
+
+
+
+
+
+

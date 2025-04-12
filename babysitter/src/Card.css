@@ -1,0 +1,142 @@
+/* Container for carousel */
+.carousel-container {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Carousel and Cards */
+.carousel {
+    display: flex;
+    align-items: center;
+}
+
+.carousel-cards {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 250px;
+    margin: 10px;
+}
+
+.card-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-info {
+    padding: 10px;
+}
+
+.card-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-location {
+    font-size: 14px;
+    color: #777;
+}
+
+.card-reviews {
+    font-size: 14px;
+    color: #3498db;
+}
+
+/* Arrows */
+.carousel-arrow {
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Yarı şeffaf arka plan */
+    border: none;
+    font-size: 50px;
+    /* Okların boyutunu büyütüyoruz */
+    font-weight: bold;
+    /* Okları kalın yapıyoruz */
+    color: #fff;
+    /* Okların rengini beyaz yapıyoruz */
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px;
+    border-radius: 50%;
+    /* Okları yuvarlak hale getiriyoruz */
+    transition: background-color 0.3s ease;
+    /* Hover efekti için geçiş ekliyoruz */
+}
+
+.carousel-arrow:hover {
+    background-color: #3498db;
+    /* Hover durumunda okların arka plan rengini değiştiriyoruz */
+}
+
+/* Sol ok */
+.left {
+    left: 10px;
+}
+
+/* Sağ ok */
+.right {
+    right: 10px;
+}
+
+/* Show All Button */
+.show-all-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.show-all-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Card List for Show All */
+.card-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.babysitter-detail img {
+    width: 300px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.message-form {
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}

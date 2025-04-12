@@ -1,0 +1,75 @@
+/* RequestList.css */
+
+.request-list {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .request-list h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+ 
+  .request-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .request-list table th, .request-list table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .request-list table th {
+    background-color: #f1f2f6;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .request-list table tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  
+  .request-list .actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .request-list .actions button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .request-list .actions button:hover {
+    background-color: #45a049;
+  }
+  
+  .request-list .actions button.reject {
+    background-color: #f44336;
+  }
+  
+  .request-list .actions button.reject:hover {
+    background-color: #e53935;
+  }
+  
+  .request-list .actions button.accept {
+    background-color: #2196f3;
+  }
+  
+  .request-list .actions button.accept:hover {
+    background-color: #1976d2;
+  }
+  

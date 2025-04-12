@@ -1,0 +1,47 @@
+.announcement-container {
+    padding: 1rem;
+    max-width: 800px;
+    margin: auto;
+    font-family: sans-serif;
+  }
+  
+  .back-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    color: #007bff;
+  }
+  
+  .announcement-header h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .details-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .details-section li {
+    margin: 0.5rem 0;
+  }
+  
+  .availability-table th,
+  .availability-table td {
+    padding: 0.5rem;
+    text-align: center;
+  }
+  
+  .available-day {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .map-container {
+    height: 300px;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
