@@ -18,6 +18,11 @@
   margin: 20px;
 }
 
+/* Yeni: image-wrapper tanımı */
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+}
 
 /* Profile Image Section */
 .profile-image-section {
@@ -26,8 +31,6 @@
   align-items: center;
   margin-bottom: 20px;
 }
-
-
 
 .profile-image {
   width: 70px;
@@ -40,7 +43,8 @@
 
 .change-photo-button {
   position: absolute;
-  bottom: 380px;
+  bottom: 10px;
+  /* Düzeltilmiş değer */
   left: 50%;
   transform: translateX(-50%);
   background-color: #c71585;
@@ -88,10 +92,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-right: 50px;
 }
 
 .form-group label {
-  font-weight: 60px;
+  font-weight: 600;
+  /* Düzeltilmiş */
   color: #555;
   font-size: 14px;
   margin-bottom: 8px;
@@ -113,6 +119,7 @@
   border-color: #c71585;
   box-shadow: 0 0 0 3px rgba(199, 21, 133, 0.1);
 }
+
 /* Submit Button */
 .submit-button {
   width: 100%;
@@ -161,6 +168,5 @@
 
   .profile-container {
     padding: 15px;
-    
   }
 }

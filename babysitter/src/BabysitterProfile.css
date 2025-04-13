@@ -70,7 +70,7 @@
 .profile-img-container {
   flex-shrink: 0;
   width: 200px;
-  position: relative;
+  /* position: relative; */
 }
 
 .profile-img {
@@ -83,17 +83,16 @@
 }
 
 .hourly-rate {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-  text-align: center;
-  border-radius: 0 0 10px 10px;
+  display: block;
+    margin-top: 10px;
+    /* Resim ile arasına boşluk ekler */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
 }
 
 .rating-stars {
@@ -131,9 +130,8 @@
   font-size: 15px;
 }
 
-/* Details Section */
+/* Details Section, availability-section şimdilik devre dışı... */
 .details-section,
-.availability-section,
 .map-section,
 .reviews-section {
   padding: 20px;
@@ -177,6 +175,57 @@
 }
 
 /* Availability Section */
+/* Geliştirilmiş Availability Section */
+.availability-section {
+  padding: 25px 30px;
+  /* Daha geniş iç boşluk */
+  background-color: #ffffff;
+  /* Daha aydınlık ve temiz arka plan */
+  border: 1px solid #e0e0e0;
+  /* İnce kenarlık */
+  border-radius: 12px;
+  /* Yuvarlatılmış köşeler */
+  margin-bottom: 30px;
+  /* Alt boşluğu artırdık */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Hafif gölge efekti */
+}
+
+/* Availability Section Başlık */
+.availability-section h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 22px;
+  /* Başlık boyutunu biraz büyüttüm */
+  font-weight: 600;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  /* Alt çizgi ile vurgulama */
+}
+
+/* Availability Section İçindeki Tablo */
+.availability-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.availability-section th {
+  background-color: #4a90e2;
+  color: #fff;
+  font-weight: 500;
+  padding: 15px;
+  text-align: left;
+  border-bottom: 2px solid #357ABD;
+  /* Başlık altındaki çizgi, farkındalık yaratıyor */
+}
+
+.availability-section td {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #fff;
+  color: #333;
+}
 .table-scroll-container {
   overflow-x: auto;
   margin: 0 -20px;

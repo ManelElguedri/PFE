@@ -54,7 +54,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="footerCopyright">
+      <div className="footerCopyright" style={{ color: "white" }}>
         <p>©KidCare 2025</p>
       </div>
     </footer>

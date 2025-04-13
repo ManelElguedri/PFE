@@ -1,6 +1,14 @@
+// BabysitterPage.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaUser, FaClock, FaBell, FaEnvelope, FaBriefcase } from "react-icons/fa";
+import {
+  FaHome,
+  FaUser,
+  FaClock,
+  FaBell,
+  FaEnvelope,
+  FaBriefcase,
+} from "react-icons/fa";
 import "./BabysitterPage.css";
 import BabysitterWelcome from "./BabysitterWelcome";
 import BabysitterProfileSection from "./BabysitterProfileSection";
@@ -9,9 +17,13 @@ import BookingRequestsSection from "./BookingRequestsSection";
 import JobApplicationsSection from "./JobApplicationsSection";
 import MessageSection from "./MessageSection";
 import NotificationSection from "./NotificationSection";
+import NotificationModal from "./NotificationModal";
+import MessageModal from "./MessageModal"; // Yeni mesaj modal bileşeni
 
 function BabysitterPage() {
   const [activeSection, setActiveSection] = useState("welcome");
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false); // Yeni state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,34 +40,51 @@ function BabysitterPage() {
   return (
     <div className="parent-container">
       <aside className="sidebar">
-        
         <nav>
           <ul className="menu">
-            <li className="menu-item" onClick={() => handleMenuClick("welcome")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("welcome")}
+            >
               <FaHome />
               <span>Welcome</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("profile")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("profile")}
+            >
               <FaUser />
               <span>My profile</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("availability")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("availability")}
+            >
               <FaClock />
               <span>Availability</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("requests")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("requests")}
+            >
               <FaBell />
               <span>Booking Requests</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("applications")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("applications")}
+            >
               <FaBriefcase />
               <span>Applications</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("messages")}>
+            <li className="menu-item" onClick={() => setShowMessageModal(true)}>
               <FaEnvelope />
               <span>Messages</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("notifications")}>
+            <li
+              className="menu-item"
+              onClick={() => setShowNotificationModal(true)}
+            >
               <FaBell />
               <span>Notifications</span>
             </li>
@@ -66,19 +95,23 @@ function BabysitterPage() {
       <main className="main-content">
         <header className="header">
           <div className="greeting-container">
-            <div className="greeting">
-              Good Morning Babysitter
-            </div>
+            <div className="greeting">Good Morning Babysitter</div>
           </div>
           <div className="header-icons">
-            <div className="icon-wrapper notification-icon" onClick={() => handleMenuClick("notifications")}>
+            <div
+              className="icon-wrapper notification-icon"
+              onClick={() => setShowNotificationModal(true)}
+            >
               <span className="dot"></span>
               <FaBell />
             </div>
-            <div className="icon-wrapper" onClick={() => handleMenuClick("messages")}>
+            <div
+              className="icon-wrapper"
+              onClick={() => setShowMessageModal(true)}
+            >
               <FaEnvelope />
             </div>
-           </div>
+          </div>
         </header>
 
         <section className="section-content">
@@ -91,6 +124,13 @@ function BabysitterPage() {
           {activeSection === "notifications" && <NotificationSection />}
         </section>
       </main>
+
+      {showNotificationModal && (
+        <NotificationModal onClose={() => setShowNotificationModal(false)} />
+      )}
+      {showMessageModal && (
+        <MessageModal onClose={() => setShowMessageModal(false)} />
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ function Header() {
               <Link to="/Home">Home</Link>
             </li>
             <li>
-              <Link to="/Babysitting announcement">Babysitting announcement</Link>
+              <Link to="/Babysitting-announcement">Babysitting announcement</Link>
             </li>
           </ul>
         </div>

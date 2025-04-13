@@ -5,18 +5,51 @@ function BookingRequestsSection() {
   const [bookingRequests, setBookingRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // useEffect(() => {
+  //   // Fetch booking requests from backend
+  //   const fetchBookingRequests = async () => {
+  //     const response = await fetch("/api/babysitter/booking-requests", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     setBookingRequests(data);
+  //     setIsLoading(false);
+  //   };
+
+  //   fetchBookingRequests();
+  // }, []);
   useEffect(() => {
-    // Fetch booking requests from backend
     const fetchBookingRequests = async () => {
-      const response = await fetch("/api/babysitter/booking-requests", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setBookingRequests(data);
-      setIsLoading(false);
+      try {
+        const response = await fetch("/api/babysitter/booking-requests", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!response.ok) {
+          // Yanıt ok değilse, text olarak hata mesajını loglayın
+          const errorText = await response.text();
+          console.error("Fetch error:", response.status, errorText);
+          setIsLoading(false);
+          return;
+        }
+
+        // Yanıtı JSON olarak parse etmeye çalışıyoruz
+        const data = await response.json();
+        setBookingRequests(data);
+      } catch (error) {
+        console.error(
+          "JSON parse hatası veya fetch işlemi sırasında hata:",
+          error
+        );
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchBookingRequests();
