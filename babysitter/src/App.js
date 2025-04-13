@@ -30,6 +30,7 @@ import AvailabilitySection from "./AvailabilitySection";
 import BabysitterProfileSection from "./BabysitterProfileSection";
 import BookingRequestsSection from "./BookingRequestsSection";
 import JobApplicationsSection from "./JobApplicationsSection";
+import BabysitterDashboard from "./BabysitterDashboard";
 function App() {
   return (
     <div id="App">
@@ -37,7 +38,10 @@ function App() {
 
       <Routes>
         <Route path="/home" element={<Home />} />
-        <Route path="/babysitting-announcement" element={<BabysittingAnnouncement />} />
+        <Route
+          path="/babysitting-announcement"
+          element={<BabysittingAnnouncement />}
+        />
         <Route path="/babysitter/:name" element={<BabysitterDetail />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<SignIn />} />
@@ -48,22 +52,28 @@ function App() {
         <Route path="/announcements" element={<AnnoucementSection />} />
         <Route path="/welcome" element={<WelcomeSection />} />
         <Route path="/babysitter-profile" element={<BabysitterProfile />} />
-        <Route path="/candidature-responses" element={<CandidatureResponses />} />
+        <Route
+          path="/candidature-responses"
+          element={<CandidatureResponses />}
+        />
         <Route path="/babysitter-page" element={<BabysitterPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/admin-home" element={<AdminHome/>} />
-        <Route path="/admin-profile" element={<AdminProfile/>} />
-        <Route path="/parent-list" element={<ParentList/>} />
-        <Route path="/babysitter-list" element={<BabysitterList/>} />
-        <Route Path="/announcement-list" element={<AnnouncementList/>}/>
-        <Route Path="/application-list" element={<ApplicationList/>}/>
-        <Route Path="/request-list" element={<RequestList/>}/>
-        <Route Path="/document-list" element={<DocumentList/>}/>
-        <Route Path="/availability" element={<AvailabilitySection/>}/>
-        <Route Path="/babysitter-profile" element={<BabysitterProfileSection/>}/>
-        <Route Path="/booking-requests" element={<BookingRequestsSection/>}/>
-        <Route Path="/job-applications" element={<JobApplicationsSection/>}/>
-
+        <Route path="/admin-home" element={<AdminHome />} />
+        <Route path="/admin-profile" element={<AdminProfile />} />
+        <Route path="/parent-list" element={<ParentList />} />
+        <Route path="/babysitter-list" element={<BabysitterList />} />
+        <Route Path="/announcement-list" element={<AnnouncementList />} />
+        <Route Path="/application-list" element={<ApplicationList />} />
+        <Route Path="/request-list" element={<RequestList />} />
+        <Route Path="/document-list" element={<DocumentList />} />
+        <Route Path="/availability" element={<AvailabilitySection />} />
+        <Route
+          Path="/babysitter-profile"
+          element={<BabysitterProfileSection />}
+        />
+        <Route Path="/booking-requests" element={<BookingRequestsSection />} />
+        <Route Path="/job-applications" element={<JobApplicationsSection />} />
+        <Route path="/babysitterdashboard" element={<BabysitterDashboard />} />
       </Routes>
 
       <Footer />

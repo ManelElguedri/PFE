@@ -50,7 +50,7 @@ function Signup() {
   return (
     <div className="signup-container">
       {!role ? (
-        <div className="role-selection">
+        <div className="role-selection" style={{textAlign: "center"}}>
           <h2>Select Your Role</h2>
           <div className="role-option" onClick={() => handleRoleSelection("parent")}>
             <img src={parentImage} alt="Parent" />

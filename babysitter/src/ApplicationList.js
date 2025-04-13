@@ -1,30 +1,58 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "./ApplicationList.css"; // Si tu as des styles spécifiques pour cette liste
+import "./ApplicationList.css";
 
 const ApplicationList = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fonction pour récupérer les applications depuis le backend
+  // Gerçek API olmadığı için dummy verilerle çalışıyoruz.
   const fetchApplications = async () => {
     try {
       setLoading(true);
-      // Remplace l'URL par celle de ton API backend
-      const response = await axios.get("/api/applications");
-      setApplications(response.data);
-      setLoading(false);
+      // Gerçek ağ gecikmesini simüle ediyoruz.
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Dummy veri; ihtiyaçlarınıza göre güncelleyebilirsiniz.
+      const dummyData = [
+        {
+          id: 1,
+          name: "Ali Damok",
+          email: "ali.damok@example.com",
+          dateApplied: "2023-09-01",
+          status: "Pending",
+        },
+        {
+          id: 2,
+          name: "Rahma Guesmi",
+          email: "rahma.guesmi@example.com",
+          dateApplied: "2023-09-02",
+          status: "Approved",
+        },
+        {
+          id: 3,
+          name: "Yasmin Treki",
+          email: "yasmin.treki@example.com",
+          dateApplied: "2023-09-03",
+          status: "Rejected",
+        },
+      ];
+
+      // Konsola log ekleyerek dummy verileri kontrol edebilirsiniz.
+      console.log("Dummy API Response:", dummyData);
+      setApplications(dummyData);
     } catch (err) {
+      console.error("Error fetching applications:", err.message);
       setError("Erreur lors du chargement des applications.");
+    } finally {
       setLoading(false);
     }
   };
 
-  // Utilisation de useEffect pour charger les données au montage du composant
+  // useEffect yalnızca bileşen ilk yüklendiğinde çalışır.
   useEffect(() => {
     fetchApplications();
-  }, []); // [] signifie que l'effet ne se déclenche qu'une seule fois au montage
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -43,7 +71,7 @@ const ApplicationList = () => {
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
-            <th>Date of application</th>
+            <th>Date of Application</th>
             <th>Status</th>
           </tr>
         </thead>

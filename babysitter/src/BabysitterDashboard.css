@@ -1,0 +1,186 @@
+/* Genel Dashboard Container */
+.dashboard-container {
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #fff0f5, #fbeffb);
+    /* Hafif pembe-lavanta tonlarında hoş bir geçiş */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Başlık Stilleri */
+.dashboard-container h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #d6336c;
+    /* Canlı pembe-mor ton */
+}
+
+.dashboard-section h2 {
+    color: #d6336c;
+    font-size: 24px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ffb6c1;
+    /* Açık pembe alt çizgi */
+    padding-bottom: 5px;
+}
+
+/* Profil Information Bölümü */
+.profile-info .profile-details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-info .profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ffb6c1;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info .profile-text h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #b71c1c;
+    /* Derin kırmızı tonu */
+}
+
+.profile-info .profile-text p {
+    margin: 5px 0;
+    color: #555;
+}
+
+/* Working Parents Section - Kart Stili */
+.parent-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.parent-card {
+    width: 250px;
+    background: #ffe6f2;
+    /* Hafif pembe arka plan */
+    border: 1px solid #ffb6c1;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.parent-card h4 {
+    margin: 10px 0 5px;
+    color: #b71c1c;
+    /* Derin kırmızı */
+}
+
+.parent-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+.parent-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 10px;
+    border: 2px solid #ffb6c1;
+}
+
+/* Availability Bölümü */
+.availability ul {
+    list-style: none;
+    padding: 0;
+}
+
+.availability li {
+    background: #e0f7fa;
+    /* Açık mavi-turkuaz ton */
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    text-transform: capitalize;
+    color: #006064;
+}
+
+/* Diğer Dashboard Bölümleri */
+.dashboard-section {
+    margin-bottom: 30px;
+}
+
+.dashboard-container {
+    padding: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #fff0f5, #fce4ec);
+    /* Yumuşak pastel pembe geçişi */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.availability li {
+    background: #fce4ec;
+    /* Pastel pembe arka plan */
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    text-transform: capitalize;
+    color: #ad1457;
+    /* Koyu pembe ton */
+}
+
+body {
+    background: #fff;
+    /* Yumuşak pastel pembe geçişi */
+    margin: 0;
+    padding: 0;
+    font-family: 'Lora', serif;
+    /* Daha nazik ve zarif bir font */
+    /* color: #6d1b7c; */
+    /* Genel metin rengi: yumuşak, fakat okunabilir koyu morumsu pembe */
+}
+
+/* Başlık Stilleri */
+h1 {
+    color: #d6336c;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #d6336c;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ffb6c1;
+    padding-bottom: 5px;
+}
+
+h3 {
+    color: #ad1457;
+    font-size: 1.75rem;
+    margin: 0 0 10px 0;
+}
+
+/* Paragraflar ve Liste Metinleri */
+p,
+li {
+    /* color: #6d1b7c; */
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Butonlarda da metin rengi uyumlu olsun */
+.btn {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #ffffff;
+}

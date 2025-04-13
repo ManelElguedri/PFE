@@ -11,22 +11,39 @@ function AvailabilitySection() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
-    // Fetch availability from backend
     const fetchAvailability = async () => {
-      const response = await fetch("/api/babysitter/availability", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setAvailability(data);
-      setIsLoading(false);
+      try {
+        const response = await fetch("/api/babysitter/availability", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        // Sunucu yanıtında hata var mı kontrol edin
+        if (!response.ok) {
+          // Yanıt JSON formatında değilse veya hata mesajı içeriyorsa text olarak loglayın
+          const errorText = await response.text();
+          console.error("Fetch error:", response.status, errorText);
+          setIsLoading(false);
+          return;
+        }
+
+        // Eğer yanıt sorunsuzsa JSON olarak ayrıştırın
+        const data = await response.json();
+        setAvailability(data);
+      } catch (error) {
+        console.error("Error fetching availability:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchAvailability();
   }, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -5,22 +5,57 @@ function JobApplicationsSection() {
   const [jobApplications, setJobApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // useEffect(() => {
+  //   // Fetch job applications from backend
+  //   const fetchJobApplications = async () => {
+  //     const response = await fetch("/api/babysitter/job-applications", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     setJobApplications(data);
+  //     setIsLoading(false);
+  //   };
+
+  //   fetchJobApplications();
+  // }, []);
+
   useEffect(() => {
-    // Fetch job applications from backend
     const fetchJobApplications = async () => {
-      const response = await fetch("/api/babysitter/job-applications", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      setJobApplications(data);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        // Örnek mock verisi:
+        const mockData = [
+          {
+            _id: "1",
+            parentName: "John Doe",
+            date: "2023-09-01",
+            startTime: "09:00",
+            endTime: "12:00",
+          },
+          {
+            _id: "2",
+            parentName: "Jane Smith",
+            date: "2023-09-03",
+            startTime: "13:00",
+            endTime: "16:00",
+          },
+        ];
+        // Simülasyon için küçük gecikme ekleyebilirsiniz:
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        setJobApplications(mockData);
+      } catch (error) {
+        console.error("Error fetching job applications:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchJobApplications();
   }, []);
+
 
   const handleApplyForJob = async (jobId) => {
     const response = await fetch(`/api/babysitter/job-applications/${jobId}/apply`, {

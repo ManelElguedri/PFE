@@ -9,18 +9,57 @@ const ParentList = ({ searchQuery }) => {
   useEffect(() => {
     const fetchParents = async () => {
       try {
-        // Remplacer l'URL par celle de ton API
-        const response = await fetch(`/api/parents?search=${searchQuery}`);
-        
-        if (!response.ok) {
-          throw new Error("Failed to fetch parents data");
-        }
+        setLoading(true);
+        // Ağ gecikmesini simüle ediyoruz.
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Dummy veriler
+        const dummyData = [
+          {
+            id: 1,
+            firstname: "Ali",
+            lastname: "Damok",
+            email: "ali.damok@example.com",
+            address: "Sfax, Tunisia",
+            numberofchildren: 2,
+            gender: "Male",
+             // Bu alan dummy veri içinde olsa da, listelemede kullanılmayacak.
+          },
+          {
+            id: 2,
+            firstname: "Rahma",
+            lastname: "Guesmi",
+            email: "rahma.guesmi@example.com",
+            address: "Tunis, Tunisia",
+            numberofchildren: 1,
+            gender: "Female",
+            
+          },
+          {
+            id: 3,
+            firstname: "Yasmin",
+            lastname: "Treki",
+            email: "yasmin.treki@example.com",
+            address: "Kairouan, Tunisia",
+            numberofchildren: 3,
+            gender: "Female",
+            
+          },
+        ];
 
-        const data = await response.json();
-        setParents(data);
-        setLoading(false);
+        // Arama sorgusuna göre filtreleme: (isim, soyisim veya adres alanında arama yapar)
+        const filteredData = dummyData.filter(
+          (parent) =>
+            parent.firstname
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            parent.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            parent.address.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
+        setParents(filteredData);
       } catch (error) {
         setError("Unable to load parent data. Please try again later.");
+      } finally {
         setLoading(false);
       }
     };
@@ -41,13 +80,25 @@ const ParentList = ({ searchQuery }) => {
         ) : (
           parents.map((parent) => (
             <div className="parent-card" key={parent.id}>
-              <p><strong>FirstName:</strong> {parent.firstname}</p>
-              <p><strong>LastName:</strong> {parent.lastname}</p>
-              <p><strong>Email:</strong> {parent.email}</p>
-              <p><strong>Phone:</strong> {parent.phone}</p>
-              <p><strong>Address:</strong> {parent.address}</p>
-              <p><strong>NumberofChildren:</strong> {parent.numberofchildren}</p>
-              <p><strong>gender:</strong> {parent.gender}</p>
+              <p>
+                <strong>FirstName:</strong> {parent.firstname}
+              </p>
+              <p>
+                <strong>LastName:</strong> {parent.lastname}
+              </p>
+              <p>
+                <strong>Email:</strong> {parent.email}
+              </p>
+              <p>
+                <strong>Address:</strong> {parent.address}
+              </p>
+              <p>
+                <strong>Number of Children:</strong> {parent.numberofchildren}
+              </p>
+              <p>
+                <strong>Gender:</strong> {parent.gender}
+              </p>
+              {/* Telefon numarası listelemeye dahil edilmedi */}
             </div>
           ))
         )}
