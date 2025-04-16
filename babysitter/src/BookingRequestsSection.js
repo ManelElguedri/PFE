@@ -1,130 +1,57 @@
 import React, { useState, useEffect } from "react";
+import api from "./api";
 import "./BookingRequestsSection.css";
 
-function BookingRequestsSection() {
-  const [bookingRequests, setBookingRequests] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+const BookingRequestsSection = () => {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // useEffect(() => {
-  //   // Fetch booking requests from backend
-  //   const fetchBookingRequests = async () => {
-  //     const response = await fetch("/api/babysitter/booking-requests", {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-  //     const data = await response.json();
-  //     setBookingRequests(data);
-  //     setIsLoading(false);
-  //   };
-
-  //   fetchBookingRequests();
-  // }, []);
   useEffect(() => {
-    const fetchBookingRequests = async () => {
+    const fetchReqs = async () => {
+      setLoading(true);
+      setError("");
       try {
-        const response = await fetch("/api/babysitter/booking-requests", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        if (!response.ok) {
-          // Yanıt ok değilse, text olarak hata mesajını loglayın
-          const errorText = await response.text();
-          console.error("Fetch error:", response.status, errorText);
-          setIsLoading(false);
-          return;
-        }
-
-        // Yanıtı JSON olarak parse etmeye çalışıyoruz
-        const data = await response.json();
-        setBookingRequests(data);
-      } catch (error) {
-        console.error(
-          "JSON parse hatası veya fetch işlemi sırasında hata:",
-          error
-        );
+        const res = await api.get("/babysitter/booking-requests");
+        setRequests(res.data);
+      } catch {
+        setError("Booking requests yüklenemedi.");
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-
-    fetchBookingRequests();
+    fetchReqs();
   }, []);
 
-  const handleAcceptRequest = async (requestId) => {
-    const response = await fetch(`/api/babysitter/booking-requests/${requestId}/accept`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    if (response.ok) {
-      alert("Booking request accepted");
-      setBookingRequests(bookingRequests.filter((req) => req._id !== requestId));
-    } else {
-      alert("Failed to accept booking request");
+  const respond = async (id, action) => {
+    try {
+      await api.post(`/babysitter/booking-requests/${id}/${action}`);
+      setRequests((r) => r.filter((x) => x._id !== id));
+    } catch {
+      setError("İşlem başarısız.");
     }
   };
 
-  const handleDeclineRequest = async (requestId) => {
-    const response = await fetch(`/api/babysitter/booking-requests/${requestId}/decline`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    if (response.ok) {
-      alert("Booking request declined");
-      setBookingRequests(bookingRequests.filter((req) => req._id !== requestId));
-    } else {
-      alert("Failed to decline booking request");
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="booking-requests-section">
       <h2>Booking Requests</h2>
-      {bookingRequests.length === 0 ? (
-        <p>No new booking requests.</p>
+      {requests.length === 0 ? (
+        <p>No new requests.</p>
       ) : (
-        <div className="booking-requests-list">
-          {bookingRequests.map((request) => (
-            <div key={request._id} className="booking-request-item">
-              <p>
-                <strong>{request.parentName}</strong> has requested your services
-                for <strong>{request.date}</strong> from {request.startTime} to{" "}
-                {request.endTime}.
-              </p>
-              <div className="booking-request-actions">
-                <button
-                  className="accept-button"
-                  onClick={() => handleAcceptRequest(request._id)}
-                >
-                  Accept
-                </button>
-                <button
-                  className="decline-button"
-                  onClick={() => handleDeclineRequest(request._id)}
-                >
-                  Decline
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        requests.map((r) => (
+          <div key={r._id} className="booking-request-item">
+            <p>
+              {r.parentName} wants {r.date} {r.startTime}-{r.endTime}
+            </p>
+            <button onClick={() => respond(r._id, "accept")}>Accept</button>
+            <button onClick={() => respond(r.__id, "decline")}>Decline</button>
+          </div>
+        ))
       )}
     </div>
   );
-}
-
+};
 export default BookingRequestsSection;

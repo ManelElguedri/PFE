@@ -1,57 +1,67 @@
 .announcement-list {
-    padding: 20px;
-    max-width: 900px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-  }
-  
-  .announcement-list h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .announcement-list p {
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .loading,
-  .error {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 30px;
-  }
-  
-  .error {
-    color: red;
-  }
-  
-  .announcement-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .announcement-card {
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 16px;
-    background-color: #fafafa;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
-  }
-  
-  .announcement-card:hover {
-    transform: translateY(-4px);
-  }
-  
-  .announcement-card p {
-    margin: 6px 0;
-  }
-  
-  .announcement-card strong {
-    color: #444;
-  }
-  
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.announcement-list h2 {
+  color: #d6336c;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.card .meta {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.card .excerpt {
+  flex: 1;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.card .btn {
+  align-self: flex-end;
+  text-decoration: none;
+  background: #d6336c;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.card .btn:hover {
+  background: #b71c1c;
+}
+
+.loading,
+.error {
+  text-align: center;
+  color: #555;
+  margin-top: 40px;
+}
