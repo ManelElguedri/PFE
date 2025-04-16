@@ -1,54 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "./api";
 import "./MessageSection.css";
-function MessageSection() {
-  const [messages, setMessages] = useState([]);  // Liste des messages envoyés
-  const [newMessage, setNewMessage] = useState("");  // Texte du nouveau message
 
-  // Fonction pour gérer le changement dans le champ de saisie
-  const handleMessageChange = (event) => {
-    setNewMessage(event.target.value);
-  };
+const MessageSection = () => {
+  const [messages, setMessages] = useState([]);
+  const [newMsg, setNewMsg] = useState({ receiverId: "", content: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Fonction pour envoyer un message
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {  // Vérifie que le message n'est pas vide
-      setMessages([...messages, { sender: "You", text: newMessage }]);  // Ajoute le message du parent
-      setNewMessage("");  // Vide le champ de saisie après envoi
+  useEffect(() => {
+    const fetchMsgs = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const res = await api.get("/messages");
+        setMessages(res.data);
+      } catch {
+        setError("Mesajlar yüklenemedi.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMsgs();
+  }, []);
 
-      // Ajouter une réponse automatique du babysitter après l'envoi d'un message
-      setTimeout(() => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: "Babysitter", text: "Thank you for your message! I'll get back to you shortly." }
-        ]);
-      }, 1000); // Réponse après 1 seconde (simule un délai de réponse)
+  const send = async () => {
+    try {
+      await api.post("/messages", newMsg);
+      const res = await api.get("/messages");
+      setMessages(res.data);
+      setNewMsg({ receiverId: "", content: "" });
+    } catch {
+      setError("Mesaj gönderilemedi.");
     }
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div className="message-section">
-      <div className="message-container">
-        {/* Affichage des messages envoyés */}
-        {messages.map((message, index) => (
-          <div key={index} className="message">
-            <strong>{message.sender}:</strong> {message.text}
-          </div>
+      <h2>Messages</h2>
+      <ul>
+        {messages.map((m) => (
+          <li key={m._id}>
+            {m.content} (from {m.from.name})
+          </li>
         ))}
+      </ul>
+      <div className="new-message-form">
+        <input
+          name="receiverId"
+          value={newMsg.receiverId}
+          onChange={(e) =>
+            setNewMsg((p) => ({ ...p, [e.target.name]: e.target.value }))
+          }
+          placeholder="Receiver ID"
+        />
+        <textarea
+          name="content"
+          value={newMsg.content}
+          onChange={(e) =>
+            setNewMsg((p) => ({ ...p, [e.target.name]: e.target.value }))
+          }
+          placeholder="Message"
+        ></textarea>
+        <button onClick={send}>Send</button>
       </div>
-
-      {/* Champ de saisie de message */}
-      <textarea
-        value={newMessage}
-        onChange={handleMessageChange}
-        placeholder="Type your message here..."
-      />
-
-      {/* Bouton pour envoyer le message */}
-      <button onClick={handleSendMessage}>Send Message</button>
     </div>
   );
-}
-
+};
 export default MessageSection;
-
-

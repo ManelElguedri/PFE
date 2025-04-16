@@ -1,74 +1,28 @@
 import React, { useState, useEffect } from "react";
+import api from "./api";
 import "./BabysitterList.css";
 
 const BabysitterList = ({ searchQuery }) => {
   const [babysitters, setBabysitters] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchBabysitters = async () => {
+    const fetchList = async () => {
+      setLoading(true);
+      setError("");
       try {
-        setLoading(true);
-        // Simüle edilen ağ gecikmesi
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        // Dummy (örnek) babysitter verileri
-        const dummyData = [
-          {
-            id: 1,
-            firstname: "Alice",
-            lastname: "Brown",
-            email: "alice.brown@example.com",
-            location: "New York",
-            educationlevel: "College Graduate",
-            smoker: "No",
-            babysittingfrequency: "Weekly",
-          },
-          {
-            id: 2,
-            firstname: "Emily",
-            lastname: "Davis",
-            email: "emily.davis@example.com",
-            location: "Los Angeles",
-            educationlevel: "High School",
-            smoker: "No",
-            babysittingfrequency: "Occasionally",
-          },
-          {
-            id: 3,
-            firstname: "Sophia",
-            lastname: "Johnson",
-            email: "sophia.johnson@example.com",
-            location: "Chicago",
-            educationlevel: "Bachelor's",
-            smoker: "No",
-            babysittingfrequency: "Daily",
-          },
-        ];
-
-        // Eğer searchQuery varsa, dummy verileri filtreleyelim:
-        const filteredData = dummyData.filter(
-          (babysitter) =>
-            babysitter.firstname
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            babysitter.lastname
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            babysitter.location
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())
-        );
-
-        setBabysitters(filteredData);
-      } catch (error) {
-        setError("Unable to load babysitter data. Please try again later.");
+        const res = await api.get("/babysitters", {
+          params: { search: searchQuery },
+        });
+        setBabysitters(res.data);
+      } catch {
+        setError("Babysitter verileri yüklenemedi.");
       } finally {
         setLoading(false);
       }
     };
-
-    fetchBabysitters();
+    fetchList();
   }, [searchQuery]);
 
   if (loading) return <p className="loading">Loading babysitter data...</p>;
@@ -77,35 +31,24 @@ const BabysitterList = ({ searchQuery }) => {
   return (
     <div className="babysitter-list">
       <h2>Babysitter List</h2>
-      {/* <p>Search Query: {searchQuery}</p> */}
+      <p>Search Query: {searchQuery}</p>
       <div className="babysitter-cards">
         {babysitters.length === 0 ? (
           <p>No babysitters found</p>
         ) : (
-          babysitters.map((babysitter) => (
-            <div className="babysitter-card" key={babysitter.id}>
+          babysitters.map((b) => (
+            <div key={b._id} className="babysitter-card">
               <p>
-                <strong>FirstName:</strong> {babysitter.firstname}
+                <strong>FirstName:</strong> {b.firstname}
               </p>
               <p>
-                <strong>LastName:</strong> {babysitter.lastname}
+                <strong>LastName:</strong> {b.lastname}
               </p>
               <p>
-                <strong>Email:</strong> {babysitter.email}
-              </p>
-              
-              <p>
-                <strong>Location:</strong> {babysitter.location}
+                <strong>Email:</strong> {b.email}
               </p>
               <p>
-                <strong>EducationLevel:</strong> {babysitter.educationlevel}
-              </p>
-              <p>
-                <strong>Smoker:</strong> {babysitter.smoker}
-              </p>
-              <p>
-                <strong>BabysittingFrequency:</strong>{" "}
-                {babysitter.babysittingfrequency}
+                <strong>Location:</strong> {b.location}
               </p>
             </div>
           ))
@@ -114,5 +57,4 @@ const BabysitterList = ({ searchQuery }) => {
     </div>
   );
 };
-
 export default BabysitterList;

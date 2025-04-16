@@ -1,73 +1,31 @@
 import React, { useState, useEffect } from "react";
+import api from "./api";
 import "./ParentList.css";
 
 const ParentList = ({ searchQuery }) => {
   const [parents, setParents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchParents = async () => {
+      setLoading(true);
+      setError("");
       try {
-        setLoading(true);
-        // Ağ gecikmesini simüle ediyoruz.
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        // Dummy veriler
-        const dummyData = [
-          {
-            id: 1,
-            firstname: "Ali",
-            lastname: "Damok",
-            email: "ali.damok@example.com",
-            address: "Sfax, Tunisia",
-            numberofchildren: 2,
-            gender: "Male",
-             // Bu alan dummy veri içinde olsa da, listelemede kullanılmayacak.
-          },
-          {
-            id: 2,
-            firstname: "Rahma",
-            lastname: "Guesmi",
-            email: "rahma.guesmi@example.com",
-            address: "Tunis, Tunisia",
-            numberofchildren: 1,
-            gender: "Female",
-            
-          },
-          {
-            id: 3,
-            firstname: "Yasmin",
-            lastname: "Treki",
-            email: "yasmin.treki@example.com",
-            address: "Kairouan, Tunisia",
-            numberofchildren: 3,
-            gender: "Female",
-            
-          },
-        ];
-
-        // Arama sorgusuna göre filtreleme: (isim, soyisim veya adres alanında arama yapar)
-        const filteredData = dummyData.filter(
-          (parent) =>
-            parent.firstname
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            parent.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            parent.address.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-
-        setParents(filteredData);
-      } catch (error) {
-        setError("Unable to load parent data. Please try again later.");
+        const res = await api.get("/parents", {
+          params: { search: searchQuery },
+        });
+        setParents(res.data);
+      } catch {
+        setError("Ebeveyn verileri yüklenemedi.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchParents();
   }, [searchQuery]);
 
-  if (loading) return <p className="loading">Loading parent data...</p>;
+  if (loading) return <p className="loading">Yükleniyor...</p>;
   if (error) return <p className="error">{error}</p>;
 
   return (
@@ -78,27 +36,26 @@ const ParentList = ({ searchQuery }) => {
         {parents.length === 0 ? (
           <p>No parents found</p>
         ) : (
-          parents.map((parent) => (
-            <div className="parent-card" key={parent.id}>
+          parents.map((p) => (
+            <div key={p._id} className="parent-card">
               <p>
-                <strong>FirstName:</strong> {parent.firstname}
+                <strong>FirstName:</strong> {p.firstname}
               </p>
               <p>
-                <strong>LastName:</strong> {parent.lastname}
+                <strong>LastName:</strong> {p.lastname}
               </p>
               <p>
-                <strong>Email:</strong> {parent.email}
+                <strong>Email:</strong> {p.email}
               </p>
               <p>
-                <strong>Address:</strong> {parent.address}
+                <strong>Address:</strong> {p.address}
               </p>
               <p>
-                <strong>Number of Children:</strong> {parent.numberofchildren}
+                <strong>Number of Children:</strong> {p.numberOfChildren}
               </p>
               <p>
-                <strong>Gender:</strong> {parent.gender}
+                <strong>Gender:</strong> {p.gender}
               </p>
-              {/* Telefon numarası listelemeye dahil edilmedi */}
             </div>
           ))
         )}
@@ -106,5 +63,4 @@ const ParentList = ({ searchQuery }) => {
     </div>
   );
 };
-
 export default ParentList;
