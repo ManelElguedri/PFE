@@ -1,3 +1,4 @@
+// src/pages/AdminDashboard.jsx
 import React, { useState } from "react";
 import "./AdminDashboard.css";
 import {
@@ -15,7 +16,7 @@ import ParentList from "./ParentList";
 import BabysitterList from "./BabysitterList";
 import AnnouncementList from "./AnnouncementList";
 import ApplicationList from "./ApplicationList";
-import RequestList from "./RequestList";  // Import du composant RequestList
+import RequestList from "./RequestList";
 import DocumentList from "./DocumentList";
 
 const AdminDashboard = () => {
@@ -37,7 +38,7 @@ const AdminDashboard = () => {
       case "applications":
         return <ApplicationList />;
       case "requests":
-        return <RequestList />;  // Afficher RequestList ici
+        return <RequestList />;
       case "documents":
         return <DocumentList />;
       default:
@@ -47,40 +48,36 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {/* Sidebar */}
       <aside className="sidebar">
         <h2 className="logo">Admin</h2>
         <ul>
           <li onClick={() => setActiveSection("home")}>
-            <FaHome /> <span>Home</span>
+            <FaHome /> Home
           </li>
           <li onClick={() => setActiveSection("profile")}>
-            <FaUser /> <span>Profile</span>
+            <FaUser /> Profile
           </li>
           <li onClick={() => setActiveSection("parents")}>
-            <FaUsers /> <span>Parent List</span>
+            <FaUsers /> Parent List
           </li>
           <li onClick={() => setActiveSection("babysitters")}>
-            <FaUsers /> <span>Babysitter List</span>
+            <FaUsers /> Babysitter List
           </li>
           <li onClick={() => setActiveSection("announcements")}>
-            <FaList /> <span>Announcement List</span>
+            <FaList /> Announcement List
           </li>
           <li onClick={() => setActiveSection("applications")}>
-            <FaClipboardList /> <span>Application List</span>
+            <FaClipboardList /> Application List
           </li>
           <li onClick={() => setActiveSection("requests")}>
-            <FaClipboardList /> <span>Request List</span> {/* Lien vers RequestList */}
+            <FaClipboardList /> Request List
           </li>
           <li onClick={() => setActiveSection("documents")}>
-            <FaFileAlt /> <span>Document List</span>
+            <FaFileAlt /> Document List
           </li>
         </ul>
       </aside>
-
-      {/* Main Content */}
       <div className="main-content">
-        {/* Barre de recherche */}
         <div className="search-bar">
           <input
             type="text"
@@ -89,8 +86,6 @@ const AdminDashboard = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-
-        {/* Section affichée */}
         {renderSection()}
       </div>
     </div>
@@ -98,5 +93,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
-

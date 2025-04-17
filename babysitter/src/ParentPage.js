@@ -1,3 +1,4 @@
+// src/pages/ParentPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaUser, FaBell, FaEnvelope, FaUsers } from "react-icons/fa";
@@ -8,7 +9,7 @@ import ProfileParent from "./ProfileParent";
 import AnnoucementSection from "./AnnoucementSection";
 import WelcomeSection from "./WelcomeSection";
 import BabysitterProfile from "./BabysitterProfile";
-import CandidatureResponses from "./CandidatureResponses"; // Section candidatures
+import CandidatureResponses from "./CandidatureResponses";
 
 function ParentPage() {
   const [activeSection, setActiveSection] = useState("welcome");
@@ -16,46 +17,66 @@ function ParentPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-    if (!isAuthenticated) {
+    // eski isAuthenticated yerine token kontrolü
+    const token = localStorage.getItem("token");
+    if (!token) {
       navigate("/signin");
     }
   }, [navigate]);
 
   const handleMenuClick = (section) => {
     setActiveSection(section);
-    setSelectedBabysitter(null); // Réinitialise le profil affiché si un babysitter est sélectionné
+    setSelectedBabysitter(null);
   };
 
   return (
     <div className="parent-container">
       <aside className="sidebar">
         <div className="logo-container">
+          {/* public klasörüne koyduğunuz video */}
           <video src="/logo1.mp4" className="logo-video" autoPlay loop muted />
         </div>
         <nav>
           <ul className="menu">
-            <li className="menu-item" onClick={() => handleMenuClick("welcome")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("welcome")}
+            >
               <FaHome />
               <span>Welcome</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("profile")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("profile")}
+            >
               <FaUser />
               <span>My profile</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("announcements")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("announcements")}
+            >
               <FaUsers />
               <span>Announcements</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("notifications")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("notifications")}
+            >
               <FaBell />
               <span>Notifications</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("messages")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("messages")}
+            >
               <FaEnvelope />
               <span>Messages</span>
             </li>
-            <li className="menu-item" onClick={() => handleMenuClick("candidatures")}>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("candidatures")}
+            >
               <FaUsers />
               <span>Applications</span>
             </li>
@@ -72,9 +93,9 @@ function ParentPage() {
 
         <section className="section-content">
           {selectedBabysitter ? (
-            <BabysitterProfile 
-              selectedBabysitter={selectedBabysitter} 
-              onClose={() => setSelectedBabysitter(null)} 
+            <BabysitterProfile
+              selectedBabysitter={selectedBabysitter}
+              onClose={() => setSelectedBabysitter(null)}
             />
           ) : (
             <>
@@ -95,5 +116,3 @@ function ParentPage() {
 }
 
 export default ParentPage;
-
-
