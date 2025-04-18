@@ -1,9 +1,7 @@
 // backend/routes/parentRoutes.js
 const express = require("express");
 const router = express.Router();
-const asyncHandler = require("express-async-handler");
 
-// Controller fonksiyonlarını import et
 const {
   getParents,
   createParent,
@@ -11,15 +9,26 @@ const {
   deleteParent,
 } = require("../controllers/parentController");
 
-// /api/parents
-router
-  .route("/")
-  .get(asyncHandler(getParents))
-  .post(asyncHandler(createParent));
+const { protect } = require("../middleware/authMiddleware");
 
-router
-  .route("/:id")
-  .put(asyncHandler(updateParent))
-  .delete(asyncHandler(deleteParent));
+// @route   GET /api/parents
+// @desc    List all parents (optional ?search= filter)
+// @access  Public
+router.get("/", getParents);
+
+// @route   POST /api/parents
+// @desc    Create a new parent
+// @access  Private (authenticated users only)
+router.post("/", protect, createParent);
+
+// @route   PUT /api/parents/:id
+// @desc    Update a parent by ID
+// @access  Private
+router.put("/:id", protect, updateParent);
+
+// @route   DELETE /api/parents/:id
+// @desc    Delete a parent by ID
+// @access  Private
+router.delete("/:id", protect, deleteParent);
 
 module.exports = router;

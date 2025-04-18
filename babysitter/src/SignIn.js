@@ -1,12 +1,12 @@
 // src/pages/SignIn.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "./api"; // doğru import
+import api from "./api"; // baseURL = REACT_APP_API_URL
 import "./SignIn.css";
 
 function SignIn() {
   const [formData, setFormData] = useState({
-    role: "parent", // selectbox’u koruyoruz
+    role: "parent",
     email: "",
     password: "",
   });
@@ -23,24 +23,24 @@ function SignIn() {
     setError("");
 
     try {
-      // /auth/login endpoint’ine relative olarak istek atıyoruz
-      const res = await api.post("http://localhost:5000/api/auth/login", {
-        role: formData.role, // dilersen backend’de kullanabilirsin
+      // CORS preflight (OPTIONS 204) → POST /auth/login (200)
+      const res = await api.post("/auth/login", {
+        role: formData.role,
         email: formData.email,
         password: formData.password,
       });
 
       const { token, user } = res.data;
-      // Token ve role’ü sakla
+      // Token ve role sakla
       localStorage.setItem("token", token);
       localStorage.setItem("userRole", user.role);
 
       // Rol bazlı yönlendirme
-      if (formData.role === "parent") {
+      if (user.role === "parent") {
         navigate("/parent-page");
-      } else if (formData.role === "babysitter") {
+      } else if (user.role === "babysitter") {
         navigate("/babysitter-page");
-      } else if (formData.role === "admin") {
+      } else if (user.role === "admin") {
         navigate("/admin-dashboard");
       }
     } catch (err) {
@@ -96,10 +96,10 @@ function SignIn() {
           />
         </div>
 
-        {/* Hata Mesajı */}
+        {/* Hata mesajı */}
         {error && <p className="error-message">{error}</p>}
 
-        {/* Gönder Butonu */}
+        {/* Giriş butonu */}
         <button type="submit" className="signin-btn">
           Sign In
         </button>

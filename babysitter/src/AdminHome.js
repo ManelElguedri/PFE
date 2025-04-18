@@ -1,33 +1,30 @@
+// src/pages/AdminHome.jsx
 import React, { useState, useEffect } from "react";
-import "./AdminProfile.css";
+import api from "./api"; // axios instance with baseURL
+import "./AdminHome.css";
 
-const AdminProfile = () => {
+const AdminHome = () => {
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Gerçek API henüz olmadığı için mock veriyi tanımlıyoruz.
-  const mockAdminData = {
-    name: "Mariem Guesmi",
-    email: "mariem.guesmi@admincorp.com",
-    role: "Super Administrator",
-    department: "IT & Operations",
-    phone: "+216-123-45-67",
-    address: "Sfax, Tunisia",
-    joinedDate: "2022-01-15",
-    bio: "Alice has been the backbone of AdminCorp’s IT strategy, overseeing major projects and ensuring smooth operations. She is committed to innovation, operational excellence, and high standards of service.",
-    profilePicture: "/avataradmin.png", // Yer tutucu profil resmi
-  };
-
   useEffect(() => {
     const fetchProfile = async () => {
+      setLoading(true);
+      setError("");
       try {
-        setLoading(true);
-        // Ağ gecikmesini simüle ediyoruz.
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setAdmin(mockAdminData);
+        const token = localStorage.getItem("token");
+        const res = await api.get("/auth/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // API'den dönen user objesini ata
+        setAdmin(res.data.user);
       } catch (err) {
-        setError(err.message || "An unknown error occurred.");
+        console.error("AdminHome fetch error:", err);
+        setError(
+          err.response?.data?.message ||
+            "Profil bilgileri yüklenirken bir hata oluştu."
+        );
       } finally {
         setLoading(false);
       }
@@ -38,7 +35,7 @@ const AdminProfile = () => {
 
   if (loading) {
     return (
-      <div className="admin-profile">
+      <div className="admin-home">
         <p>Loading profile...</p>
       </div>
     );
@@ -46,20 +43,20 @@ const AdminProfile = () => {
 
   if (error) {
     return (
-      <div className="admin-profile error">
+      <div className="admin-home error">
         <p>{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="admin-profile">
+    <div className="admin-home">
       <h2>Admin Dashboard</h2>
       <div className="profile-card">
         <div className="profile-header">
           <img
-            src={admin.profilePicture}
-            alt="Profile"
+            src={admin.profilePicture || "/avataradmin.png"}
+            alt="Admin Profile"
             className="profile-picture"
           />
           <div className="profile-basic-info">
@@ -71,25 +68,35 @@ const AdminProfile = () => {
           <p>
             <strong>Email:</strong> {admin.email}
           </p>
-          <p>
-            <strong>Department:</strong> {admin.department}
-          </p>
-          <p>
-            <strong>Phone:</strong> {admin.phone}
-          </p>
-          <p>
-            <strong>Address:</strong> {admin.address}
-          </p>
-          <p>
-            <strong>Joined Date:</strong> {admin.joinedDate}
-          </p>
-          <p>
-            <strong>Bio:</strong> {admin.bio}
-          </p>
+          {admin.department && (
+            <p>
+              <strong>Department:</strong> {admin.department}
+            </p>
+          )}
+          {admin.phone && (
+            <p>
+              <strong>Phone:</strong> {admin.phone}
+            </p>
+          )}
+          {admin.address && (
+            <p>
+              <strong>Address:</strong> {admin.address}
+            </p>
+          )}
+          {admin.joinedDate && (
+            <p>
+              <strong>Joined Date:</strong> {admin.joinedDate}
+            </p>
+          )}
+          {admin.bio && (
+            <p>
+              <strong>Bio:</strong> {admin.bio}
+            </p>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default AdminProfile;
+export default AdminHome;

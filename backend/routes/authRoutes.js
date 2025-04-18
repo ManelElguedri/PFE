@@ -14,10 +14,11 @@ const {
 } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
 
-// --- Multer configuration for file uploads ---
+// ── Multer configuration for file uploads ──────────────────────────────────
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // ensure this folder exists
+    // uploads klasörünü proje kökünde oluşturduğunuzdan emin olun
+    cb(null, path.join(__dirname, "../uploads"));
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -27,7 +28,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  // Accept images only
+  // Sadece image dosyalarına izin ver
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
@@ -38,35 +39,27 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // max 2MB
+  limits: { fileSize: 2 * 1024 * 1024 }, // maksimum 2MB
 });
 
-// Handle both profilePicture and idCard fields:
+// İki alan (profilePicture & idCard) için upload middleware
 const uploadFields = upload.fields([
   { name: "profilePicture", maxCount: 1 },
   { name: "idCard", maxCount: 1 },
 ]);
 
-// --- Routes ---
+// ── Auth Routes ────────────────────────────────────────────────────────────
 
-// @route   POST /api/auth/register
-// @desc    Register a new user (Parent, Babysitter or Admin)
-// @access  Public
+// Register: yeni kullanıcı oluştur (public)
 router.post("/register", uploadFields, asyncHandler(register));
 
-// @route   POST /api/auth/login
-// @desc    Authenticate user & get token
-// @access  Public
+// Login: giriş ve token alma (public)
 router.post("/login", asyncHandler(login));
 
-// @route   POST /api/auth/logout
-// @desc    Log user out / clear cookie
-// @access  Private
+// Logout: token’ı temizle / çıkış yap (private)
 router.post("/logout", protect, asyncHandler(logout));
 
-// @route   GET /api/auth/profile
-// @desc    Get current user profile
-// @access  Private
+// Profile: oturumlu kullanıcı bilgilerini getir (private)
 router.get("/profile", protect, asyncHandler(getProfile));
 
 module.exports = router;

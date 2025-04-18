@@ -1,5 +1,4 @@
 // backend/controllers/authController.js
-
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -17,7 +16,7 @@ const register = asyncHandler(async (req, res) => {
     throw new Error("Name, email, password ve role zorunludur");
   }
 
-  // E-posta zaten kayıtlı mı?
+  // Email zaten kayıtlı mı?
   const userExists = await User.findOne({ email });
   if (userExists) {
     res.status(400);
@@ -48,7 +47,7 @@ const register = asyncHandler(async (req, res) => {
     expiresIn: "30d",
   });
 
-  // Başarılı yanıt: hem token, hem kullanıcı bilgisi dön
+  // Yanıt: token + user bilgisi (şifre hariç)
   res.status(201).json({
     token,
     user: {
@@ -64,7 +63,7 @@ const register = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const login = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { role, email, password } = req.body;
 
   // Kullanıcıyı bul
   const user = await User.findOne({ email });
@@ -80,12 +79,18 @@ const login = asyncHandler(async (req, res) => {
     throw new Error("Invalid credentials");
   }
 
-  // JWT token üret
+  // Rol kontrolü
+  if (user.role !== role) {
+    res.status(403);
+    throw new Error("Role mismatch");
+  }
+
+  // Token üret
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 
-  // Başarılı yanıt: token ve user objesi
+  // Yanıt: token + user bilgisi
   res.status(200).json({
     token,
     user: {
@@ -97,4 +102,17 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { register, login };
+// @desc    Get logged in user profile
+// @route   GET /api/auth/profile
+// @access  Private
+const getProfile = asyncHandler(async (req, res) => {
+  // protect middleware sayesinde req.user set edilmiş olacak
+  const user = await User.findById(req.user.id).select("-password");
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  res.status(200).json({ user });
+});
+
+module.exports = { register, login, getProfile };
