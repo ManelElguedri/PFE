@@ -61,5 +61,7 @@ router.post("/logout", protect, asyncHandler(logout));
 
 // Profile: oturumlu kullanıcı bilgilerini getir (private)
 router.get("/profile", protect, asyncHandler(getProfile));
+// // Logout: çıkış yap (private)
+router.post("/logout", protect, asyncHandler(logout));
 
 module.exports = router;

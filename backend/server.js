@@ -15,13 +15,16 @@ const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const babysitterRoutes = require("./routes/babysitterRoutes");
+ const documentRoutes = require("./routes/documentRoutes");
+// Eğer başka route’larınız varsa onları da buraya ekleyin:
+// const applicationRoutes = require("./routes/applicationRoutes");
 
 const app = express();
 
-// 1) ETag üretimini kapat (304 yanıtını tamamen önler)
+// ── 0) Disable ETag to prevent 304 Not Modified ─────────────────────────────
 app.disable("etag");
 
-// 2) Tüm /api rotalarında no-cache başlıkları ekle
+// ── 1) Global no-cache headers for all /api routes ─────────────────────────
 app.use("/api", (req, res, next) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
   res.set("Pragma", "no-cache");
@@ -29,30 +32,29 @@ app.use("/api", (req, res, next) => {
   next();
 });
 
-// ── 1) CORS MIDDLEWARE ───────────────────────────────────────────────────────
-app.use(
-  cors({
-    origin: "http://localhost:3000", // React uygulamanızın adresi
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-app.options("*", cors()); // preflight için
+// ── 2) CORS middleware ───────────────────────────────────────────────────────
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cache-Control"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Preflight için
 
-// ── 2) BODY PARSER ───────────────────────────────────────────────────────────
+// ── 3) Body parsers ──────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── 3) STATIC UPLOADS ────────────────────────────────────────────────────────
+// ── 4) Static uploads (profile pics, id cards vb.) ──────────────────────────
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ── 4) MONGODB BAĞLANTISI ───────────────────────────────────────────────────
+// ── 5) MongoDB bağlantısı ────────────────────────────────────────────────────
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) {
   console.error("❌ MONGO_URI is not defined in .env");
   process.exit(1);
 }
-
 mongoose
   .connect(mongoUri, {
     useNewUrlParser: true,
@@ -64,7 +66,7 @@ mongoose
     process.exit(1);
   });
 
-// ── 5) ROUTE TANIMLAMALARI ──────────────────────────────────────────────────
+// ── 6) Route tanımlamaları ───────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
 app.use("/api/parents", parentRoutes);
 app.use("/api/announcements", announcementRoutes);
@@ -74,18 +76,20 @@ app.use("/api/job-applications", jobApplicationRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/babysitters", babysitterRoutes);
+app.use("/api/documents", documentRoutes);
+// app.use("/api/applications",    applicationRoutes); // ihtiyacınıza göre ekleyin
 
-// ── 6) HEALTH‑CHECK ─────────────────────────────────────────────────────────
+// ── 7) Basit bir health‑check ───────────────────────────────────────────────
 app.get("/", (req, res) => {
   res.send("🚀 API is running");
 });
 
-// ── 7) 404 HANDLER ──────────────────────────────────────────────────────────
+// ── 8) 404 handler ───────────────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });
 });
 
-// ── 8) GLOBAL ERROR HANDLER ─────────────────────────────────────────────────
+// ── 9) Global error handler ─────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res
@@ -93,7 +97,7 @@ app.use((err, req, res, next) => {
     .json({ message: err.message || "Internal Server Error" });
 });
 
-// ── 9) SERVER BAŞLAT ────────────────────────────────────────────────────────
+// ── 10) Server başlat ────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

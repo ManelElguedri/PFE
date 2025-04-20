@@ -1,7 +1,9 @@
+// backend/routes/jobApplicationRoutes.js
+
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
-
+const { protect } = require("../middleware/authMiddleware");
 const {
   getJobApplications,
   createJobApplication,
@@ -10,19 +12,21 @@ const {
   deleteJobApplication,
 } = require("../controllers/jobApplicationController");
 
-// /api/job-applications
+// GET  /api/job-applications       → tüm başvuruları getir
+// POST /api/job-applications       → yeni başvuru oluştur
 router
   .route("/")
   .get(asyncHandler(getJobApplications))
-  .post(asyncHandler(createJobApplication));
+  .post(protect, asyncHandler(createJobApplication));
 
-// /api/job-applications/:id
+// PUT    /api/job-applications/:id → başvuruyu güncelle
+// DELETE /api/job-applications/:id → başvuruyu sil
 router
   .route("/:id")
-  .put(asyncHandler(updateJobApplication))
-  .delete(asyncHandler(deleteJobApplication));
+  .put(protect, asyncHandler(updateJobApplication))
+  .delete(protect, asyncHandler(deleteJobApplication));
 
-// /api/job-applications/:id/apply
-router.post("/:id/apply", asyncHandler(applyForJob));
+// POST   /api/job-applications/:id/apply → belirli ilana başvur
+router.post("/:id/apply", protect, asyncHandler(applyForJob));
 
 module.exports = router;

@@ -1,28 +1,15 @@
-// backend/models/JobApplication.js
-
-const mongoose = require("mongoose"); // ← mongoose'u mutlaka import edin
+const mongoose = require("mongoose");
 
 const jobApplicationSchema = new mongoose.Schema(
   {
     babysitter: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Babysitter",
+      ref: "User",
       required: true,
     },
-    parentName: {
-      type: String,
-      required: true,
-    },
-    date: {
-      type: Date,
-      required: true,
-    },
-    startTime: {
-      type: String,
-      required: true,
-    },
-    endTime: {
-      type: String,
+    announcement: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Announcement", // Announcement modelinin adı
       required: true,
     },
     status: {
@@ -32,10 +19,8 @@ const jobApplicationSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // createdAt / updatedAt otomatik eklenir
+    timestamps: true, // createdAt / updatedAt
   }
 );
 
-const JobApplication = mongoose.model("JobApplication", jobApplicationSchema);
-
-module.exports = JobApplication;
+module.exports = mongoose.model("JobApplication", jobApplicationSchema);

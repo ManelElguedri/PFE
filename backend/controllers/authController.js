@@ -115,4 +115,13 @@ const getProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ user });
 });
 
-module.exports = { register, login, getProfile };
+// @desc    Log user out / clear cookie (opsiyonel bir endpoint)
+// @route   POST /api/auth/logout
+// @access  Private
+const logout = asyncHandler(async (req, res) => {
+  // Eğer token’ınızı HTTP‑Only cookie’de tutuyorsanız, buradan temizleyebilirsiniz:
+  // res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+module.exports = { register, login, logout, getProfile };

@@ -1,16 +1,16 @@
 // backend/models/BookingRequest.js
-
-const mongoose = require("mongoose"); // ← mongoose'u mutlaka import et
+const mongoose = require("mongoose");
 
 const bookingRequestSchema = new mongoose.Schema(
   {
-    babysitter: {
+    parent: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Babysitter",
+      ref: "User",
       required: true,
     },
-    parentName: {
-      type: String,
+    babysitter: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     date: {
@@ -31,11 +31,7 @@ const bookingRequestSchema = new mongoose.Schema(
       default: "Pending",
     },
   },
-  {
-    timestamps: true, // createdAt, updatedAt alanları eklenir
-  }
+  { timestamps: true }
 );
 
-const BookingRequest = mongoose.model("BookingRequest", bookingRequestSchema);
-
-module.exports = BookingRequest;
+module.exports = mongoose.model("BookingRequest", bookingRequestSchema);

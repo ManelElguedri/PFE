@@ -14,13 +14,13 @@ const AnnouncementList = ({ searchQuery }) => {
       setLoading(true);
       setError("");
       try {
-        // Gerçek back-end endpoint’i
+        // Real backend endpoint
         const res = await api.get("/announcements", {
           params: { search: searchQuery },
         });
         setAnnouncements(res.data);
       } catch (err) {
-        setError("Duyurular yüklenirken bir hata oluştu.");
+        setError("Failed to load announcements.");
       } finally {
         setLoading(false);
       }
@@ -28,14 +28,14 @@ const AnnouncementList = ({ searchQuery }) => {
     fetchData();
   }, [searchQuery]);
 
-  if (loading) return <div className="loading">Yükleniyor...</div>;
+  if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <section className="announcement-list">
-      <h2>Duyurular</h2>
+      <h2>Announcements</h2>
       {announcements.length === 0 ? (
-        <p>Hiç duyuru bulunamadı.</p>
+        <p>No announcements found.</p>
       ) : (
         <div className="grid">
           {announcements.map((a) => (
@@ -46,11 +46,11 @@ const AnnouncementList = ({ searchQuery }) => {
               </p>
               <p className="excerpt">
                 {a.description.length > 100
-                  ? a.description.slice(0, 100) + "…"
+                  ? a.description.slice(0, 100) + "..."
                   : a.description}
               </p>
               <Link to={`/announcements/${a._id}`} className="btn">
-                Detayları Gör
+                View Details
               </Link>
             </article>
           ))}

@@ -1,72 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import './RequestList.css';
+// src/components/RequestList.jsx
 
-const RequestList = () => {
+import React, { useState, useEffect } from "react";
+import api from "./api"; // axios instance
+import "./RequestList.css";
+
+function RequestList() {
   const [requests, setRequests] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Simuler la récupération des demandes depuis un backend
   useEffect(() => {
-    // Remplacer par un appel à l'API backend pour obtenir les demandes
     const fetchRequests = async () => {
       setLoading(true);
+      setError("");
       try {
-        // Exemple d'appel API
-        const response = await fetch('https://api.example.com/requests');
-        const data = await response.json();
-        setRequests(data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération des demandes :", error);
+        // /api/booking-requests rotasına istek at
+        const res = await api.get("/booking-requests");
+        setRequests(res.data);
+      } catch (err) {
+        console.error("Error fetching booking requests:", err);
+        setError("Failed to load booking requests.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchRequests();
   }, []);
 
-  // Fonction pour filtrer les demandes selon la recherche
-  const filteredRequests = requests.filter((request) =>
-    request.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Gérer l'action de traitement des demandes
-  const handleAction = (action, requestId) => {
-    console.log(`Action "${action}" sur la demande ${requestId}`);
-    // Ajouter la logique de backend pour accepter, rejeter, etc.
-  };
+  if (loading) return <p>Loading booking requests...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="request-list">
-      <h2>Request List</h2>
-      {/* Affichage du chargement */}
-      {loading ? (
-        <p>Loading requests...</p>
+      <h2>Booking Requests</h2>
+      {requests.length === 0 ? (
+        <p>No booking requests found.</p>
       ) : (
-        <table>
+        <table className="request-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Request Date</th>
-              <th>Actions</th>
+              <th>ID</th>
+              <th>Parent Name</th>
+              <th>Date</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {filteredRequests.map((request) => (
-              <tr key={request.id}>
-                <td>{request.name}</td>
-                <td>{request.email}</td>
-                <td>{new Date(request.requestDate).toLocaleDateString()}</td>
-                <td className="actions">
-                  <button onClick={() => handleAction('accept', request.id)} className="accept">
-                    Accept
-                  </button>
-                  <button onClick={() => handleAction('reject', request.id)} className="reject">
-                    Reject
-                  </button>
-                </td>
+            {requests.map((req) => (
+              <tr key={req._id}>
+                <td>{req._id}</td>
+                <td>{req.parentName}</td>
+                <td>{new Date(req.date).toLocaleDateString()}</td>
+                <td>{req.startTime}</td>
+                <td>{req.endTime}</td>
+                <td>{req.status}</td>
               </tr>
             ))}
           </tbody>
@@ -74,6 +63,6 @@ const RequestList = () => {
       )}
     </div>
   );
-};
+}
 
 export default RequestList;
