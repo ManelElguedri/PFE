@@ -1,8 +1,16 @@
 import axios from "axios";
 
-// Front-end ile back-end arasındaki base URL'i .env dosyasından okur
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
+});
+
+// Her isteğe token eklesin:
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default api;

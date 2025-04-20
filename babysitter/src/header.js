@@ -1,14 +1,31 @@
 // src/components/Header.jsx
+import React from "react";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "./api"; // make sure this points to your axios instance
 
 function Header() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleLogout = async () => {
+    try {
+      // optional: inform server
+      await api.post("/auth/logout");
+    } catch (err) {
+      console.warn("Logout error:", err);
+    }
+    // clear client‑side auth
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    navigate("/signin");
+  };
+
   return (
     <header>
       <div id="header-main-container" className="header-main-container">
         {/* Logo Bölümü */}
         <div id="header-logo" className="header-logo">
-          {/* public/logo1.mp4 içine koyduysanız: */}
           <video
             className="header-logo-video"
             src="/logo1.mp4"
@@ -81,16 +98,26 @@ function Header() {
         {/* Auth Butonları */}
         <div id="header-auth-buttons" className="header-auth-buttons">
           <ul className="auth-buttons">
-            <li>
-              <Link to="/signin">
-                <button className="SignIn-btn">Sign In</button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/signup">
-                <button className="SignUp-btn">Sign Up</button>
-              </Link>
-            </li>
+            {token ? (
+              <li>
+                <button onClick={handleLogout} className="SignOut-btn">
+                  Logout
+                </button>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <Link to="/signin">
+                    <button className="SignIn-btn">Sign In</button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/signup">
+                    <button className="SignUp-btn">Sign Up</button>
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

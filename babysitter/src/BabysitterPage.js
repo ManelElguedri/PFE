@@ -27,10 +27,15 @@ function BabysitterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated");
-    if (!isAuthenticated) {
-      navigate("/signin");
-    }
+    //const isAuthenticated = localStorage.getItem("isAuthenticated");
+    // if (!isAuthenticated) {
+    //   navigate("/signin");
+    // }
+
+    const token = localStorage.getItem("token");
+   if (!token) {
+     navigate("/signin");
+   }
   }, [navigate]);
 
   const handleMenuClick = (section) => {

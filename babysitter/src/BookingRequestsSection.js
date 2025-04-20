@@ -1,57 +1,49 @@
+// src/components/RequestList.jsx
 import React, { useState, useEffect } from "react";
-import api from "./api";
-import "./BookingRequestsSection.css";
+import api from "./api"; // baseURL http://localhost:5000/api olarak tanımlı olmalı
+import "./RequestList.css";
 
-const BookingRequestsSection = () => {
+function RequestList() {
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchReqs = async () => {
-      setLoading(true);
-      setError("");
+    const fetchRequests = async () => {
       try {
-        const res = await api.get("/babysitter/booking-requests");
+        const res = await api.get("/booking-requests");
         setRequests(res.data);
-      } catch {
-        setError("Booking requests yüklenemedi.");
+      } catch (err) {
+        console.error("Error fetching booking requests:", err);
+        setError("Failed to load booking requests.");
       } finally {
         setLoading(false);
       }
     };
-    fetchReqs();
+    fetchRequests();
   }, []);
 
-  const respond = async (id, action) => {
-    try {
-      await api.post(`/babysitter/booking-requests/${id}/${action}`);
-      setRequests((r) => r.filter((x) => x._id !== id));
-    } catch {
-      setError("İşlem başarısız.");
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <p>Loading requests…</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="booking-requests-section">
+    <div className="request-list">
       <h2>Booking Requests</h2>
       {requests.length === 0 ? (
-        <p>No new requests.</p>
+        <p>No requests found.</p>
       ) : (
-        requests.map((r) => (
-          <div key={r._id} className="booking-request-item">
-            <p>
-              {r.parentName} wants {r.date} {r.startTime}-{r.endTime}
-            </p>
-            <button onClick={() => respond(r._id, "accept")}>Accept</button>
-            <button onClick={() => respond(r.__id, "decline")}>Decline</button>
-          </div>
-        ))
+        <ul>
+          {requests.map((req) => (
+            <li key={req._id}>
+              <strong>{new Date(req.date).toLocaleDateString()}</strong> –{" "}
+              {req.parentName} requested from {req.startTime} to {req.endTime} (
+              {req.status})
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
-};
-export default BookingRequestsSection;
+}
+
+export default RequestList;

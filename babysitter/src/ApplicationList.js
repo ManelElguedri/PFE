@@ -1,57 +1,79 @@
+// src/components/ApplicationList.jsx
+
 import React, { useState, useEffect } from "react";
-import api from "./api";
+import api from "./api"; // axios.create({ baseURL: process.env.REACT_APP_API_URL })
 import "./ApplicationList.css";
 
-const ApplicationList = () => {
+function ApplicationList() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchApps = async () => {
+    const fetchApplications = async () => {
       setLoading(true);
       setError("");
       try {
-        const res = await api.get("/applications");
+        // GET /api/applications
+        const res = await api.get("/job-applications");
         setApplications(res.data);
-      } catch {
-        setError("Başvurular yüklenemedi.");
+      } catch (err) {
+        console.error("Error fetching applications:", err);
+        setError("Failed to load applications.");
       } finally {
         setLoading(false);
       }
     };
-    fetchApps();
+
+    fetchApplications();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <p>Loading applications...</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="application-list">
-      <h2>Application List</h2>
-      <table className="application-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((app) => (
-            <tr key={app._id}>
-              <td>{app._id}</td>
-              <td>{app.name}</td>
-              <td>{app.email}</td>
-              <td>{app.dateApplied}</td>
-              <td>{app.status}</td>
+      <h2>Job Applications</h2>
+
+      {applications.length === 0 ? (
+        <p>No applications found.</p>
+      ) : (
+        <table className="application-table">
+          <thead>
+            <tr>
+              <th>Application ID</th>
+              <th>Babysitter Name</th>
+              <th>Babysitter Email</th>
+              <th>Announcement Title</th>
+              <th>Announcement Date</th>
+              <th>Applied At</th>
+              <th>Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {applications.map((app) => {
+              const { _id, status, createdAt, babysitter, announcement } = app;
+              const appliedDate = new Date(createdAt).toLocaleString();
+              const annDate = announcement?.date
+                ? new Date(announcement.date).toLocaleDateString()
+                : "-";
+              return (
+                <tr key={_id}>
+                  <td>{_id}</td>
+                  <td>{babysitter?.name || babysitter?.fullName || "-"}</td>
+                  <td>{babysitter?.email || "-"}</td>
+                  <td>{announcement?.title || "-"}</td>
+                  <td>{annDate}</td>
+                  <td>{appliedDate}</td>
+                  <td>{status}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
-};
+}
+
 export default ApplicationList;
