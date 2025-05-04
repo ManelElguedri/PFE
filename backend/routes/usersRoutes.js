@@ -2,16 +2,8 @@ const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
 const { protect } = require("../middleware/authMiddleware");
-const {
-  getMessages,
-  sendMessage,
-} = require("../controllers/messageController");
+const { getUsers } = require("../controllers/userController");
 
-router.use(protect);
-
-router
-  .route("/")
-  .get(asyncHandler(getMessages))
-  .post(asyncHandler(sendMessage));
+router.get("/", protect, asyncHandler(getUsers));
 
 module.exports = router;

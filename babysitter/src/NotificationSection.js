@@ -15,7 +15,7 @@ const NotificationSection = () => {
         const res = await api.get("/notifications");
         setNotes(res.data);
       } catch {
-        setError("Bildirimler yüklenemedi.");
+        setError("Notifications could not be loaded.");
       } finally {
         setLoading(false);
       }
@@ -25,24 +25,26 @@ const NotificationSection = () => {
 
   const markRead = async (id) => {
     try {
-      await api.put(`/notifications/${id}`);
-      setNotes((n) => n.map((x) => (x._id === id ? { ...x, read: true } : x)));
+      const res = await api.put(`/notifications/${id}`);
+      setNotes((prev) =>
+        prev.map((n) => (n._id === id ? { ...n, isRead: res.data.isRead } : n))
+      );
     } catch {
-      setError("İşaretleme başarısız.");
+      setError("Marking notification as read failed.");
     }
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="notification-section">
       <h2>Notifications</h2>
       <ul>
         {notes.map((n) => (
-          <li key={n._id} style={{ background: n.read ? "#f0f0f0" : "#fff" }}>
-            {n.message}
-            {!n.read && (
+          <li key={n._id} className={n.isRead ? "note read" : "note unread"}>
+            <span>{n.message}</span>
+            {!n.isRead && (
               <button onClick={() => markRead(n._id)}>Mark Read</button>
             )}
           </li>
@@ -51,4 +53,5 @@ const NotificationSection = () => {
     </div>
   );
 };
+
 export default NotificationSection;

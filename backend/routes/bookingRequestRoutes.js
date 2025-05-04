@@ -1,9 +1,6 @@
-// backend/routes/bookingRequestRoutes.js
 const express = require("express");
-const router = express.Router();
-const asyncHandler = require("express-async-handler");
 const { protect } = require("../middleware/authMiddleware");
-
+const asyncHandler = require("express-async-handler");
 const {
   getBookingRequests,
   createBookingRequest,
@@ -11,21 +8,19 @@ const {
   deleteBookingRequest,
 } = require("../controllers/bookingRequestController");
 
-// @route   GET  /api/booking-requests
-// @desc    Tüm booking isteklerini getir
-// @access  Private (sadece login olmuş kullanıcılar)
+const router = express.Router();
+
+// Tüm istekler için önce protect
+router.use(protect);
+
 router
   .route("/")
-  .get(protect, asyncHandler(getBookingRequests))
-  .post(protect, asyncHandler(createBookingRequest));
+  .get(asyncHandler(getBookingRequests))
+  .post(asyncHandler(createBookingRequest));
 
-// @route   PUT    /api/booking-requests/:id
-// @route   DELETE /api/booking-requests/:id
-// @desc    Belirli bir isteği güncelle veya sil
-// @access  Private
 router
   .route("/:id")
-  .put(protect, asyncHandler(updateBookingRequest))
-  .delete(protect, asyncHandler(deleteBookingRequest));
+  .put(asyncHandler(updateBookingRequest))
+  .delete(asyncHandler(deleteBookingRequest));
 
 module.exports = router;

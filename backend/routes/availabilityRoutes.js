@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const asyncHandler = require("express-async-handler");
+const { protect } = require("../middleware/authMiddleware");
 const {
   getAvailability,
   createAvailability,
@@ -9,15 +10,14 @@ const {
   deleteAvailability,
 } = require("../controllers/availabilityController");
 
-// GET  /api/availability      → tüm availability kayıtlarını getir
-// POST /api/availability      → yeni availability oluştur
+// Tüm endpoint’leri koru, böylece req.user tanımlı olur
+router.use(protect);
+
 router
   .route("/")
   .get(asyncHandler(getAvailability))
   .post(asyncHandler(createAvailability));
 
-// PUT    /api/availability/:id → var olan kaydı güncelle
-// DELETE /api/availability/:id → var olan kaydı sil
 router
   .route("/:id")
   .put(asyncHandler(updateAvailability))

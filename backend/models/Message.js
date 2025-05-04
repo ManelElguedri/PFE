@@ -1,33 +1,25 @@
-// backend/models/Message.js
-
-const mongoose = require("mongoose"); // ← mongoose'u mutlaka import edin
+const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema(
   {
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Veya "Parent"/"Babysitter" modeline göre değiştirin
+      ref: "User",
       required: true,
     },
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Veya "Parent"/"Babysitter"
+      ref: "User",
       required: true,
     },
-    content: {
+    text: {
       type: String,
       required: true,
     },
-    read: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
-    timestamps: true, // createdAt ve updatedAt alanları otomatik eklenir
+    timestamps: true,
   }
 );
 
-const Message = mongoose.model("Message", messageSchema);
-
-module.exports = Message;
+module.exports = mongoose.model("Message", messageSchema);
