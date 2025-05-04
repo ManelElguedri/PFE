@@ -15,7 +15,8 @@ const jobApplicationRoutes = require("./routes/jobApplicationRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const babysitterRoutes = require("./routes/babysitterRoutes");
- const documentRoutes = require("./routes/documentRoutes");
+const documentRoutes = require("./routes/documentRoutes");
+const usersRoutes = require("./routes/usersRoutes");
 // Eğer başka route’larınız varsa onları da buraya ekleyin:
 // const applicationRoutes = require("./routes/applicationRoutes");
 
@@ -77,7 +78,11 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/babysitters", babysitterRoutes);
 app.use("/api/documents", documentRoutes);
-// app.use("/api/applications",    applicationRoutes); // ihtiyacınıza göre ekleyin
+app.use("/api/babysitter", babysitterRoutes);
+app.use("/api/users", usersRoutes);
+//app.use("/api/availability", availabilityRoutes);
+
+//app.use("/api/applications",    applicationRoutes); // ihtiyacınıza göre ekleyin
 
 // ── 7) Basit bir health‑check ───────────────────────────────────────────────
 app.get("/", (req, res) => {

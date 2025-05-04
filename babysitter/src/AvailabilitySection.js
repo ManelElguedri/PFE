@@ -1,72 +1,99 @@
+// src/components/AvailabilitySection.jsx
+
 import React, { useState, useEffect } from "react";
-import api from "./api";
+import api from "./api"; // axios instance’ınız, interceptor’ı burada tanımlı
 import "./AvailabilitySection.css";
 
-const AvailabilitySection = () => {
-  const [availability, setAvailability] = useState([]);
-  const [newAvail, setNewAvail] = useState({
-    day: "",
-    startTime: "",
-    endTime: "",
-  });
-  const [loading, setLoading] = useState(false);
+function AvailabilitySection() {
+  const [slots, setSlots] = useState([]);
+  const [form, setForm] = useState({ day: "", startTime: "", endTime: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // Mevcut müsaitlikleri çek
   useEffect(() => {
-    const fetchAvail = async () => {
+    const fetchSlots = async () => {
       setLoading(true);
-      setError("");
       try {
-        const res = await api.get("/babysitter/availability");
-        setAvailability(res.data);
-      } catch {
-        setError("Availability yüklenemedi.");
+        const res = await api.get("/availability");
+        setSlots(res.data);
+      } catch (err) {
+        console.error("Error fetching availability:", err);
+        setError("Failed to load availability.");
       } finally {
         setLoading(false);
       }
     };
-    fetchAvail();
+    fetchSlots();
   }, []);
 
-  const handleChange = (e) =>
-    setNewAvail((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const addAvail = async () => {
-    try {
-      await api.post("/babysitter/availability", newAvail);
-      const res = await api.get("/babysitter/availability");
-      setAvailability(res.data);
-      setNewAvail({ day: "", startTime: "", endTime: "" });
-    } catch {
-      setError("Ekleme başarısız oldu.");
-    }
+  // Form alanlarını güncelle
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const deleteAvail = async (id) => {
+  // Yeni slot ekle
+  const handleAdd = async () => {
+    const { day, startTime, endTime } = form;
+    if (!day || !startTime || !endTime) {
+      setError("All fields are required");
+      return;
+    }
     try {
-      await api.delete(`/babysitter/availability/${id}`);
-      setAvailability((a) => a.filter((x) => x._id !== id));
-    } catch {
-      setError("Silme başarısız oldu.");
+      const res = await api.post("/availability", form);
+      setSlots((prev) => [...prev, res.data]);
+      setForm({ day: "", startTime: "", endTime: "" });
+      setError("");
+    } catch (err) {
+      console.error("Error adding slot:", err);
+      setError(err.response?.data?.message || "Failed to add slot");
     }
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
-    <div className="availability-section">
-      <h2>My Availability</h2>
-      <button onClick={() => addAvail()}>Add Availability</button>
-      <ul>
-        {availability.map((av) => (
-          <li key={av._id}>
-            {av.day}: {av.startTime} - {av.endTime}{" "}
-            <button onClick={() => deleteAvail(av._id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="availability-container">
+      <h2>Your Availability</h2>
+
+      {error && <p className="error-message">{error}</p>}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div className="form-row">
+            <input
+              name="day"
+              type="text"
+              placeholder="Day (e.g. Monday)"
+              value={form.day}
+              onChange={handleChange}
+            />
+            <input
+              name="startTime"
+              type="time"
+              value={form.startTime}
+              onChange={handleChange}
+            />
+            <input
+              name="endTime"
+              type="time"
+              value={form.endTime}
+              onChange={handleChange}
+            />
+            <button onClick={handleAdd}>Add Availability</button>
+          </div>
+
+          <ul className="slots-list">
+            {slots.map((s) => (
+              <li key={s._id}>
+                {s.day}: {s.startTime} – {s.endTime}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
-};
+}
+
 export default AvailabilitySection;

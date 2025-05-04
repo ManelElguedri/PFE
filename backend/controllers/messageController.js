@@ -1,39 +1,58 @@
 // backend/controllers/messageController.js
+
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 const Message = require("../models/Message");
+const User = require("../models/User");
 
-// GET /api/messages
+// @desc    Get messages for the logged-in user
+// @route   GET /api/messages
+// @access  Private
 exports.getMessages = asyncHandler(async (req, res) => {
-  const messages = await Message.find({});
-  res.json(messages);
+  const userId = req.user._id;
+
+  const msgs = await Message.find({
+    $or: [{ senderId: userId }, { receiverId: userId }],
+  })
+    .populate("senderId", "name email")
+    .populate("receiverId", "name email")
+    .sort("-createdAt");
+
+  res.status(200).json(msgs);
 });
 
-// POST /api/messages
-exports.createMessage = asyncHandler(async (req, res) => {
-  const { senderId, receiverId, content } = req.body;
-  const newMsg = await Message.create({ senderId, receiverId, content });
-  res.status(201).json(newMsg);
-});
+// @desc    Send a new message
+// @route   POST /api/messages
+// @access  Private
+exports.sendMessage = asyncHandler(async (req, res) => {
+  const senderId = req.user._id;
+  const { receiverId, text } = req.body;
 
-// PUT /api/messages/:id/read  → okundu olarak işaretle
-exports.markAsRead = asyncHandler(async (req, res) => {
-  const msg = await Message.findById(req.params.id);
-  if (!msg) {
-    res.status(404);
-    throw new Error("Message not found");
+  // Validation
+  if (!receiverId || !text) {
+    res.status(400);
+    throw new Error("receiverId and text are required");
   }
-  msg.read = true;
-  await msg.save();
-  res.json(msg);
-});
-
-// DELETE /api/messages/:id
-exports.deleteMessage = asyncHandler(async (req, res) => {
-  const msg = await Message.findById(req.params.id);
-  if (!msg) {
-    res.status(404);
-    throw new Error("Message not found");
+  if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+    res.status(400);
+    throw new Error("receiverId must be a valid ObjectId");
   }
-  await msg.remove();
-  res.status(204).end();
+
+  // Ensure receiver exists
+  const receiver = await User.findById(receiverId);
+  if (!receiver) {
+    res.status(404);
+    throw new Error("Receiver not found");
+  }
+
+  // Create message
+  let msg = await Message.create({ senderId, receiverId, text });
+
+  // Populate the sender and receiver fields (Mongoose 6+)
+  msg = await msg.populate([
+    { path: "senderId", select: "name email" },
+    { path: "receiverId", select: "name email" },
+  ]);
+
+  res.status(201).json(msg);
 });

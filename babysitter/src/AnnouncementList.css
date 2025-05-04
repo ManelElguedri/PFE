@@ -1,67 +1,84 @@
-.announcement-list {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: 'Segoe UI', sans-serif;
-}
+/* AnnouncementList.css */
 
-.announcement-list h2 {
-  color: #d6336c;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.grid {
+/* Grid düzeni */
+.announcement-list .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.card {
+/* Kart görünümü */
+.announcement-list .card {
   background: #fff;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #e3e3e3;
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
+  padding: 1.25rem;
+  transition: box-shadow 0.2s ease;
 }
 
-.card h3 {
-  margin: 0 0 8px;
-  color: #333;
+.announcement-list .card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.card .meta {
-  font-size: 0.85rem;
-  color: #777;
-  margin-bottom: 12px;
+/* Başlık */
+.announcement-list .card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #222;
 }
 
-.card .excerpt {
-  flex: 1;
-  color: #555;
-  line-height: 1.4;
-  margin-bottom: 16px;
+/* Meta bilgi (tarih & konum) */
+.announcement-list .card .meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
 }
 
-.card .btn {
-  align-self: flex-end;
-  text-decoration: none;
-  background: #d6336c;
+/* Özet metin */
+.announcement-list .card .excerpt {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+/* "Detayları Gör" butonu/linki */
+.announcement-list .card .btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
   color: #fff;
-  padding: 8px 12px;
+  text-decoration: none;
   border-radius: 4px;
-  transition: background 0.2s;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
-.card .btn:hover {
-  background: #b71c1c;
+.announcement-list .card .btn:hover {
+  background-color: #0056b3;
 }
 
-.loading,
-.error {
-  text-align: center;
-  color: #555;
-  margin-top: 40px;
+/* Eğer kart içinde form elemanları (input, select, textarea) varsa */
+.announcement-list input,
+.announcement-list select,
+.announcement-list textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.announcement-list input:focus,
+.announcement-list select:focus,
+.announcement-list textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }

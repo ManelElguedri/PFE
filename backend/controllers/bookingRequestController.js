@@ -1,5 +1,3 @@
-// backend/controllers/bookingRequestController.js
-
 const asyncHandler = require("express-async-handler");
 const BookingRequest = require("../models/BookingRequest");
 
@@ -12,7 +10,6 @@ exports.getBookingRequests = asyncHandler(async (req, res) => {
     throw new Error("Not authenticated");
   }
 
-  // parent ise kendi oluşturduklarını, babysitter ise kendisine gelenleri al
   const filter = {};
   if (req.user.role === "parent") {
     filter.parent = req.user._id;
@@ -22,7 +19,8 @@ exports.getBookingRequests = asyncHandler(async (req, res) => {
 
   const list = await BookingRequest.find(filter)
     .populate("parent", "name email")
-    .populate("babysitter", "name email");
+    .populate("babysitter", "name email")
+    .sort("-createdAt");
 
   res.status(200).json(list);
 });
@@ -39,9 +37,7 @@ exports.createBookingRequest = asyncHandler(async (req, res) => {
   const { babysitter, date, startTime, endTime } = req.body;
   if (!babysitter || !date || !startTime || !endTime) {
     res.status(400);
-    throw new Error(
-      "babysitter, date, startTime ve endTime alanları zorunludur"
-    );
+    throw new Error("babysitter, date, startTime and endTime are required");
   }
 
   const newReq = await BookingRequest.create({
@@ -52,11 +48,10 @@ exports.createBookingRequest = asyncHandler(async (req, res) => {
     endTime,
   });
 
-  // Oluşan kaydı dönerken populate edelim
-  const populated = await newReq
+  // Popüle edilmiş versiyonunu gönder
+  const populated = await BookingRequest.findById(newReq._id)
     .populate("parent", "name email")
-    .populate("babysitter", "name email")
-    .execPopulate();
+    .populate("babysitter", "name email");
 
   res.status(201).json(populated);
 });
@@ -65,34 +60,31 @@ exports.createBookingRequest = asyncHandler(async (req, res) => {
 // @route   PUT /api/booking-requests/:id
 // @access  Private
 exports.updateBookingRequest = asyncHandler(async (req, res) => {
-  const request = await BookingRequest.findById(req.params.id);
-  if (!request) {
+  const updated = await BookingRequest.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  )
+    .populate("parent", "name email")
+    .populate("babysitter", "name email");
+
+  if (!updated) {
     res.status(404);
-    throw new Error("Booking request bulunamadı");
+    throw new Error("Booking request not found");
   }
 
-  // İstendiği takdirde sadece durum vs. alanlarını güncelleyebilirsiniz
-  Object.assign(request, req.body);
-  const updated = await request.save();
-
-  const populated = await updated
-    .populate("parent", "name email")
-    .populate("babysitter", "name email")
-    .execPopulate();
-
-  res.status(200).json(populated);
+  res.status(200).json(updated);
 });
 
 // @desc    Delete a booking request
 // @route   DELETE /api/booking-requests/:id
 // @access  Private
 exports.deleteBookingRequest = asyncHandler(async (req, res) => {
-  const request = await BookingRequest.findById(req.params.id);
-  if (!request) {
+  const reqDoc = await BookingRequest.findById(req.params.id);
+  if (!reqDoc) {
     res.status(404);
-    throw new Error("Booking request bulunamadı");
+    throw new Error("Booking request not found");
   }
-
-  await request.remove();
+  await reqDoc.remove();
   res.status(204).end();
 });
