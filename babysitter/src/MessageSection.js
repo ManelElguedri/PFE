@@ -1,4 +1,3 @@
-// src/components/MessageSection.jsx
 import React, { useState, useEffect } from "react";
 import api from "./api";
 import "./MessageSection.css";
@@ -6,52 +5,74 @@ import "./MessageSection.css";
 const MessageSection = () => {
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [newMsg, setNewMsg] = useState({ receiverId: "", text: "" });
+  const [newMsg, setNewMsg] = useState({ to: "", text: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 1) Kullanıcıları çek
+  // Kullanıcıları çek
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get("/users");
+        const res = await api.get("/users", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         setUsers(res.data);
       } catch (e) {
-        console.error("Failed to load users", e);
+        console.error("Kullanıcılar yüklenemedi:", e);
       }
     };
     fetchUsers();
   }, []);
 
-  // 2) Mesajları çek
+  // Mesajları çek ve 10 saniyede bir kontrol et
   useEffect(() => {
-    const fetchMsgs = async () => {
-      setLoading(true);
+    const fetchMessages = async () => {
       try {
-        const res = await api.get("/messages");
+        const res = await api.get("/babysitters/messages", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        // Yeni mesaj varsa uyarı göster
+        if (res.data.length > messages.length) {
+          const newMsg = res.data[res.data.length - 1];
+          const sender = newMsg.from?.name || newMsg.from?.email || "Unknown";
+          const text = newMsg.text || "";
+          alert(`📩 New message from ${sender}: "${text}"`);
+        }
+
         setMessages(res.data);
       } catch (e) {
-        setError("Failed to load messages.");
-      } finally {
-        setLoading(false);
+        console.error("Mesajlar alınamadı:", e);
+        setError("Mesajlar yüklenemedi.");
       }
     };
-    fetchMsgs();
-  }, []);
+
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 10000); // 10 saniyede bir
+
+    return () => clearInterval(interval);
+  }, [messages]);
 
   const send = async () => {
-    if (!newMsg.receiverId || !newMsg.text) {
-      setError("Receiver and text are required.");
+    if (!newMsg.to || !newMsg.text) {
+      setError("Alıcı ve mesaj zorunludur.");
       return;
     }
+
     try {
-      await api.post("/messages", newMsg);
-      const res = await api.get("/messages");
-      setMessages(res.data);
-      setNewMsg({ receiverId: "", text: "" });
+      await api.post("/babysitters/messages", newMsg, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setNewMsg({ to: "", text: "" });
       setError("");
     } catch {
-      setError("Message could not be sent.");
+      setError("Mesaj gönderilemedi.");
     }
   };
 
@@ -60,20 +81,20 @@ const MessageSection = () => {
       <h2>Messages</h2>
       {loading && <p>Loading…</p>}
       {error && <p className="error">{error}</p>}
+
       <ul>
         {messages.map((m) => (
           <li key={m._id}>
-            {m.text} <em>(from {m.senderId?.name || m.senderId?.email})</em>
+            <strong>{m.from?.name || m.from?.email}:</strong> {m.text}
           </li>
         ))}
       </ul>
+
       <div className="new-message-form">
         <select
-          name="receiverId"
-          value={newMsg.receiverId}
-          onChange={(e) =>
-            setNewMsg((p) => ({ ...p, receiverId: e.target.value }))
-          }
+          name="to"
+          value={newMsg.to}
+          onChange={(e) => setNewMsg((p) => ({ ...p, to: e.target.value }))}
         >
           <option value="">Select recipient</option>
           {users.map((u) => (
@@ -82,11 +103,12 @@ const MessageSection = () => {
             </option>
           ))}
         </select>
+
         <textarea
           name="text"
           value={newMsg.text}
           onChange={(e) => setNewMsg((p) => ({ ...p, text: e.target.value }))}
-          placeholder="Message"
+          placeholder="Your message..."
         />
         <button onClick={send}>Send</button>
       </div>

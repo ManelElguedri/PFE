@@ -1,17 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const asyncHandler = require("express-async-handler");
-const { protect } = require("../middleware/authMiddleware");
 const {
-  getMessages,
   sendMessage,
+  getMessages,
 } = require("../controllers/messageController");
+const { protect } = require("../middleware/authMiddleware");
 
-router.use(protect);
-
-router
-  .route("/")
-  .get(asyncHandler(getMessages))
-  .post(asyncHandler(sendMessage));
+router.post("/", protect, sendMessage); // POST /api/messages
+router.get("/:userId", protect, getMessages); // GET /api/messages/:userId
 
 module.exports = router;

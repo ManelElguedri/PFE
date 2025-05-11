@@ -12,7 +12,9 @@ const User = require("../models/User");
 // @route   GET /api/babysitters?search=...
 // @access  Public
 const getBabysitters = asyncHandler(async (req, res) => {
+  const { minAge, maxAge } = req.query;
   const { search } = req.query;
+  const { address } = req.query;
   const filter = { role: "babysitter" };
 
   if (search) {
@@ -22,6 +24,17 @@ const getBabysitters = asyncHandler(async (req, res) => {
       { name: regex }, // yoksa name
       { email: regex },
     ];
+  }
+
+  if (address) {
+    const locationRegex = new RegExp(address, "i");
+    filter.address = locationRegex;
+  }
+
+  if (minAge || maxAge) {
+    filter.age = {};
+    if (minAge) filter.age.$gte = parseInt(minAge);
+    if (maxAge) filter.age.$lte = parseInt(maxAge);
   }
 
   const list = await User.find(filter).select("-password");

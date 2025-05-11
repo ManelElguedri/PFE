@@ -1,90 +1,72 @@
-const asyncHandler = require("express-async-handler");
+// backend/controllers/bookingRequestController.js
 const BookingRequest = require("../models/BookingRequest");
+const asyncHandler = require("express-async-handler");
 
-// @desc    Get booking requests for the current user
-// @route   GET /api/booking-requests
-// @access  Private
-exports.getBookingRequests = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authenticated");
-  }
+// 1) Booking oluşturma
+const createBookingRequest = asyncHandler(async (req, res) => {
+  const { babysitterId } = req.body;
 
-  const filter = {};
-  if (req.user.role === "parent") {
-    filter.parent = req.user._id;
-  } else if (req.user.role === "babysitter") {
-    filter.babysitter = req.user._id;
-  }
-
-  const list = await BookingRequest.find(filter)
-    .populate("parent", "name email")
-    .populate("babysitter", "name email")
-    .sort("-createdAt");
-
-  res.status(200).json(list);
-});
-
-// @desc    Create a new booking request (only parents)
-// @route   POST /api/booking-requests
-// @access  Private
-exports.createBookingRequest = asyncHandler(async (req, res) => {
-  if (!req.user || req.user.role !== "parent") {
-    res.status(403);
-    throw new Error("Only parents can create booking requests");
-  }
-
-  const { babysitter, date, startTime, endTime } = req.body;
-  if (!babysitter || !date || !startTime || !endTime) {
+  if (!babysitterId) {
     res.status(400);
-    throw new Error("babysitter, date, startTime and endTime are required");
+    throw new Error("Babysitter ID gerekli.");
   }
 
-  const newReq = await BookingRequest.create({
+  const existing = await BookingRequest.findOne({
     parent: req.user._id,
-    babysitter,
-    date,
-    startTime,
-    endTime,
+    babysitter: babysitterId,
+    status: "pending",
   });
 
-  // Popüle edilmiş versiyonunu gönder
-  const populated = await BookingRequest.findById(newReq._id)
-    .populate("parent", "name email")
-    .populate("babysitter", "name email");
-
-  res.status(201).json(populated);
-});
-
-// @desc    Update an existing booking request
-// @route   PUT /api/booking-requests/:id
-// @access  Private
-exports.updateBookingRequest = asyncHandler(async (req, res) => {
-  const updated = await BookingRequest.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  )
-    .populate("parent", "name email")
-    .populate("babysitter", "name email");
-
-  if (!updated) {
-    res.status(404);
-    throw new Error("Booking request not found");
+  if (existing) {
+    res.status(400);
+    throw new Error("Zaten bekleyen bir isteğiniz var.");
   }
 
-  res.status(200).json(updated);
+  const booking = await BookingRequest.create({
+    parent: req.user._id,
+    babysitter: babysitterId,
+  });
+
+  res.status(201).json(booking);
 });
 
-// @desc    Delete a booking request
-// @route   DELETE /api/booking-requests/:id
-// @access  Private
-exports.deleteBookingRequest = asyncHandler(async (req, res) => {
-  const reqDoc = await BookingRequest.findById(req.params.id);
-  if (!reqDoc) {
-    res.status(404);
-    throw new Error("Booking request not found");
-  }
-  await reqDoc.remove();
-  res.status(204).end();
+// 2) Babysitter booking isteklerini görür
+const getBabysitterBookings = asyncHandler(async (req, res) => {
+  const bookings = await BookingRequest.find({ babysitter: req.user._id })
+    .populate("parent", "name email")
+    .sort({ date: -1 });
+
+  res.json(bookings);
 });
+
+// 3) Kabul/Reddet
+const respondBookingRequest = asyncHandler(async (req, res) => {
+  const booking = await BookingRequest.findById(req.params.id);
+
+  if (!booking) {
+    res.status(404);
+    throw new Error("Booking bulunamadı");
+  }
+
+  if (booking.babysitter.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("Yetkisiz işlem");
+  }
+
+  const { action } = req.body;
+  if (!["accepted", "declined"].includes(action)) {
+    res.status(400);
+    throw new Error("Geçersiz yanıt");
+  }
+
+  booking.status = action;
+  await booking.save();
+  res.json(booking);
+});
+
+// 🔥 En önemli yer burası
+module.exports = {
+  createBookingRequest,
+  getBabysitterBookings,
+  respondBookingRequest,
+};

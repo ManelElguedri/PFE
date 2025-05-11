@@ -1,7 +1,14 @@
 // src/pages/ParentPage.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaHome, FaUser, FaBell, FaEnvelope, FaUsers } from "react-icons/fa";
+import {
+  FaHome,
+  FaUser,
+  FaBell,
+  FaEnvelope,
+  FaUsers,
+  FaSearch,
+} from "react-icons/fa";
 import "./ParentPage.css";
 import MessageSection from "./MessageSection";
 import NotificationSection from "./NotificationSection";
@@ -10,6 +17,7 @@ import AnnoucementSection from "./AnnoucementSection";
 import WelcomeSection from "./WelcomeSection";
 import BabysitterProfile from "./BabysitterProfile";
 import CandidatureResponses from "./CandidatureResponses";
+import BabysitterList from "./BabysitterList";
 
 function ParentPage() {
   const [activeSection, setActiveSection] = useState("welcome");
@@ -17,7 +25,6 @@ function ParentPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // eski isAuthenticated yerine token kontrolü
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/signin");
@@ -33,24 +40,24 @@ function ParentPage() {
     <div className="parent-container">
       <aside className="sidebar">
         <div className="logo-container">
-          {/* public klasörüne koyduğunuz video */}
           <video src="/logo1.mp4" className="logo-video" autoPlay loop muted />
         </div>
         <nav>
           <ul className="menu">
-            <li
-              className="menu-item"
-              onClick={() => handleMenuClick("welcome")}
-            >
+            <li className="menu-item" onClick={() => handleMenuClick("welcome")}>
               <FaHome />
               <span>Welcome</span>
             </li>
-            <li
-              className="menu-item"
-              onClick={() => handleMenuClick("profile")}
-            >
+            <li className="menu-item" onClick={() => handleMenuClick("profile")}>
               <FaUser />
               <span>My profile</span>
+            </li>
+            <li
+              className="menu-item"
+              onClick={() => handleMenuClick("findBabysitter")}
+            >
+              <FaSearch />
+              <span>Find Babysitter</span>
             </li>
             <li
               className="menu-item"
@@ -107,6 +114,9 @@ function ParentPage() {
               {activeSection === "notifications" && <NotificationSection />}
               {activeSection === "announcements" && <AnnoucementSection />}
               {activeSection === "candidatures" && <CandidatureResponses />}
+              {activeSection === "findBabysitter" && (
+                <BabysitterList onSelectBabysitter={setSelectedBabysitter} />
+              )}
             </>
           )}
         </section>

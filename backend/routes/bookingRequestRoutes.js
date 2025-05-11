@@ -1,26 +1,15 @@
+// backend/routes/bookingRequestRoutes.js
 const express = require("express");
+const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
-const asyncHandler = require("express-async-handler");
 const {
-  getBookingRequests,
   createBookingRequest,
-  updateBookingRequest,
-  deleteBookingRequest,
+  getBabysitterBookings,
+  respondBookingRequest,
 } = require("../controllers/bookingRequestController");
 
-const router = express.Router();
-
-// Tüm istekler için önce protect
-router.use(protect);
-
-router
-  .route("/")
-  .get(asyncHandler(getBookingRequests))
-  .post(asyncHandler(createBookingRequest));
-
-router
-  .route("/:id")
-  .put(asyncHandler(updateBookingRequest))
-  .delete(asyncHandler(deleteBookingRequest));
+router.post("/", protect, createBookingRequest);
+router.get("/", protect, getBabysitterBookings);
+router.post("/:id/respond", protect, respondBookingRequest);
 
 module.exports = router;
