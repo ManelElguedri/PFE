@@ -1,39 +1,26 @@
-// backend/controllers/messageController.js
 const asyncHandler = require("express-async-handler");
 const Message = require("../models/Message");
 
-// GET /api/messages
-exports.getMessages = asyncHandler(async (req, res) => {
-  const messages = await Message.find({});
-  res.json(messages);
+// Parent/Babysitter mesaj gönderir
+const sendMessage = asyncHandler(async (req, res) => {
+  const { to, text } = req.body;
+  const from = req.user._id;
+
+  const message = await Message.create({ from, to, text });
+  res.status(201).json(message);
 });
 
-// POST /api/messages
-exports.createMessage = asyncHandler(async (req, res) => {
-  const { senderId, receiverId, content } = req.body;
-  const newMsg = await Message.create({ senderId, receiverId, content });
-  res.status(201).json(newMsg);
+// İki kullanıcı arasındaki tüm mesajları getir
+const getMessages = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const messages = await Message.find({
+    $or: [
+      { from: req.user._id, to: userId },
+      { from: userId, to: req.user._id },
+    ],
+  }).sort({ createdAt: 1 });
+
+  res.status(200).json(messages);
 });
 
-// PUT /api/messages/:id/read  → okundu olarak işaretle
-exports.markAsRead = asyncHandler(async (req, res) => {
-  const msg = await Message.findById(req.params.id);
-  if (!msg) {
-    res.status(404);
-    throw new Error("Message not found");
-  }
-  msg.read = true;
-  await msg.save();
-  res.json(msg);
-});
-
-// DELETE /api/messages/:id
-exports.deleteMessage = asyncHandler(async (req, res) => {
-  const msg = await Message.findById(req.params.id);
-  if (!msg) {
-    res.status(404);
-    throw new Error("Message not found");
-  }
-  await msg.remove();
-  res.status(204).end();
-});
+module.exports = { sendMessage, getMessages };

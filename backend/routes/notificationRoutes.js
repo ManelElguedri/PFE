@@ -1,24 +1,16 @@
-// backend/routes/notificationRoutes.js
 const express = require("express");
-const router = express.Router();
 const asyncHandler = require("express-async-handler");
+const { protect } = require("../middleware/authMiddleware");
 const {
   getNotifications,
-  createNotification,
-  markNotificationRead,
-  deleteNotification,
+  markAsRead,
 } = require("../controllers/notificationController");
 
-// /api/notifications
-router
-  .route("/")
-  .get(asyncHandler(getNotifications))
-  .post(asyncHandler(createNotification));
+const router = express.Router();
 
-// /api/notifications/:id
-router
-  .route("/:id")
-  .put(asyncHandler(markNotificationRead))
-  .delete(asyncHandler(deleteNotification));
+// Tüm bildirimleri getir
+router.get("/", protect, asyncHandler(getNotifications));
+// Tek bir bildirimi okunmuş olarak işaretle
+router.put("/:id", protect, asyncHandler(markAsRead));
 
 module.exports = router;

@@ -1,7 +1,6 @@
-// src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "./api"; // ← Doğru yol: src/api.js
+import api from "./api";
 import "./Signup.css";
 import parentImage from "./assets/parent1.jpg";
 import babysitterImage from "./assets/Babysitter2.jpg";
@@ -23,6 +22,8 @@ function Signup() {
     idCard: null,
     gender: "",
     numberOfChildren: "",
+    age: "",
+    address: "", // 👈 eklendi
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -39,14 +40,13 @@ function Signup() {
 
   const handleRoleSelection = (selectedRole) => {
     setRole(selectedRole);
-    setError(""); // Rol seçildikten sonra önceki hatayı temizle
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Önceki hataları temizle
+    setError("");
 
-    // FormData’a dönüştür
     const data = new FormData();
     data.append("role", role);
     Object.entries(formData).forEach(([key, val]) => {
@@ -59,11 +59,8 @@ function Signup() {
       await api.post("http://localhost:5000/api/auth/register", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      // Kayıt başarılı → SignIn sayfasına yönlendir
       navigate("/signin");
     } catch (err) {
-      // Backend’den gelen mesaj varsa onu, yoksa genel bir hata
       const msg =
         err.response?.data?.message ||
         "Kayıt sırasında bir hata oluştu. Lütfen bilgilerinizi kontrol edin.";
@@ -74,7 +71,7 @@ function Signup() {
   return (
     <div className="signup-container">
       {!role ? (
-        <div className="role-selection"style={{textAlign: "center"}}>
+        <div className="role-selection" style={{ textAlign: "center" }}>
           <h2>Select Your Role</h2>
           <div
             className="role-option"
@@ -97,7 +94,6 @@ function Signup() {
             {role === "babysitter" ? "Babysitter Signup" : "Parent Signup"}
           </h2>
 
-          {/* Ortak alanlar */}
           <div className="form-group">
             <label htmlFor="name">First Name</label>
             <input
@@ -109,6 +105,7 @@ function Signup() {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="surname">Last Name</label>
             <input
@@ -120,6 +117,7 @@ function Signup() {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -131,6 +129,7 @@ function Signup() {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="phone">Phone</label>
             <input
@@ -142,6 +141,7 @@ function Signup() {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -158,6 +158,31 @@ function Signup() {
           {role === "babysitter" && (
             <>
               <div className="form-group">
+                <label htmlFor="age">Age</label>
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  required
+                  min="18"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="educationLevel">Education Level</label>
                 <input
                   type="text"
@@ -168,6 +193,7 @@ function Signup() {
                   required
                 />
               </div>
+
               <div className="form-group">
                 <label htmlFor="isSmoker">Smoker</label>
                 <select
@@ -182,6 +208,7 @@ function Signup() {
                   <option value="no">No</option>
                 </select>
               </div>
+
               <div className="form-group">
                 <label htmlFor="babysittingPlace">
                   Preferred Babysitting Location
@@ -198,6 +225,7 @@ function Signup() {
                   <option value="atFamily">At family’s home</option>
                 </select>
               </div>
+
               <div className="form-group">
                 <label htmlFor="babysittingFrequency">
                   Babysitting Frequency
@@ -214,6 +242,7 @@ function Signup() {
                   <option value="daily">Daily</option>
                 </select>
               </div>
+
               <div className="form-group">
                 <label htmlFor="profilePicture">Upload Profile Picture</label>
                 <input
@@ -224,6 +253,7 @@ function Signup() {
                   onChange={handleFileChange}
                 />
               </div>
+
               <div className="form-group">
                 <label htmlFor="idCard">Upload ID Card</label>
                 <input
@@ -255,6 +285,7 @@ function Signup() {
                   <option value="male">Male</option>
                 </select>
               </div>
+
               <div className="form-group">
                 <label htmlFor="numberOfChildren">Number of Children</label>
                 <input
@@ -267,6 +298,7 @@ function Signup() {
                   min="1"
                 />
               </div>
+
               <div className="form-group">
                 <label htmlFor="profilePicture">Upload Profile Picture</label>
                 <input

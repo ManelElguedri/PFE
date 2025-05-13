@@ -1,17 +1,15 @@
 // backend/models/Availability.js
-
-const mongoose = require("mongoose"); // ← mongoose’u import et!
+const mongoose = require("mongoose");
 
 const availabilitySchema = new mongoose.Schema(
   {
     babysitter: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Babysitter",
+      ref: "User",
       required: true,
     },
     day: {
       type: String,
-      required: true,
       enum: [
         "Monday",
         "Tuesday",
@@ -21,6 +19,7 @@ const availabilitySchema = new mongoose.Schema(
         "Saturday",
         "Sunday",
       ],
+      required: true,
     },
     startTime: {
       type: String,
@@ -36,6 +35,4 @@ const availabilitySchema = new mongoose.Schema(
   }
 );
 
-const Availability = mongoose.model("Availability", availabilitySchema);
-
-module.exports = Availability;
+module.exports = mongoose.model("Availability", availabilitySchema);

@@ -1,4 +1,3 @@
-// backend/models/BookingRequest.js
 const mongoose = require("mongoose");
 
 const bookingRequestSchema = new mongoose.Schema(
@@ -13,25 +12,17 @@ const bookingRequestSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    date: {
-      type: Date,
-      required: true,
-    },
-    startTime: {
-      type: String,
-      required: true,
-    },
-    endTime: {
-      type: String,
-      required: true,
-    },
     status: {
       type: String,
-      enum: ["Pending", "Accepted", "Declined"],
-      default: "Pending",
+      enum: ["pending", "accepted", "declined"],
+      default: "pending",
+    },
+    date: {
+      type: Date,
+      default: Date.now,
     },
   },
-  { timestamps: true }
+  { timestamps: true } // 👈 bunu ekledik
 );
 
 module.exports = mongoose.model("BookingRequest", bookingRequestSchema);

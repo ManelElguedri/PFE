@@ -7,48 +7,72 @@ const NotificationSection = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const fetchNotes = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await api.get("/notifications", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setNotes(res.data);
+    } catch (err) {
+      console.error(err);
+      setError("Notifications could not be loaded.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchNotes = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await api.get("/notifications");
-        setNotes(res.data);
-      } catch {
-        setError("Bildirimler yüklenemedi.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchNotes();
+    const interval = setInterval(fetchNotes, 15000); // 15 saniyede bir kontrol et (polling)
+    return () => clearInterval(interval);
   }, []);
 
   const markRead = async (id) => {
     try {
-      await api.put(`/notifications/${id}`);
-      setNotes((n) => n.map((x) => (x._id === id ? { ...x, read: true } : x)));
-    } catch {
-      setError("İşaretleme başarısız.");
+      const res = await api.put(
+        `/notifications/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setNotes((prev) =>
+        prev.map((n) => (n._id === id ? { ...n, isRead: res.data.isRead } : n))
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Marking notification as read failed.");
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="loading">Loading notifications...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="notification-section">
       <h2>Notifications</h2>
-      <ul>
-        {notes.map((n) => (
-          <li key={n._id} style={{ background: n.read ? "#f0f0f0" : "#fff" }}>
-            {n.message}
-            {!n.read && (
-              <button onClick={() => markRead(n._id)}>Mark Read</button>
-            )}
-          </li>
-        ))}
-      </ul>
+      {notes.length === 0 ? (
+        <p>No notifications available</p>
+      ) : (
+        <ul>
+          {notes.map((n) => (
+            <li key={n._id} className={n.isRead ? "note read" : "note unread"}>
+              <span>{n.message}</span>
+              {!n.isRead && (
+                <button onClick={() => markRead(n._id)}>Mark Read</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
+
 export default NotificationSection;

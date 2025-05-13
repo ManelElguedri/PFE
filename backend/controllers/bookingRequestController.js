@@ -1,98 +1,97 @@
 // backend/controllers/bookingRequestController.js
-
 const asyncHandler = require("express-async-handler");
 const BookingRequest = require("../models/BookingRequest");
+const Notification = require("../models/Notification");
+const User = require("../models/User");
 
-// @desc    Get booking requests for the current user
-// @route   GET /api/booking-requests
-// @access  Private
-exports.getBookingRequests = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authenticated");
-  }
+// 1. Booking oluştur (Parent → Babysitter)
+const createBookingRequest = asyncHandler(async (req, res) => {
+  const { babysitterId } = req.body;
 
-  // parent ise kendi oluşturduklarını, babysitter ise kendisine gelenleri al
-  const filter = {};
-  if (req.user.role === "parent") {
-    filter.parent = req.user._id;
-  } else if (req.user.role === "babysitter") {
-    filter.babysitter = req.user._id;
-  }
-
-  const list = await BookingRequest.find(filter)
-    .populate("parent", "name email")
-    .populate("babysitter", "name email");
-
-  res.status(200).json(list);
-});
-
-// @desc    Create a new booking request (only parents)
-// @route   POST /api/booking-requests
-// @access  Private
-exports.createBookingRequest = asyncHandler(async (req, res) => {
-  if (!req.user || req.user.role !== "parent") {
-    res.status(403);
-    throw new Error("Only parents can create booking requests");
-  }
-
-  const { babysitter, date, startTime, endTime } = req.body;
-  if (!babysitter || !date || !startTime || !endTime) {
+  if (!babysitterId) {
     res.status(400);
-    throw new Error(
-      "babysitter, date, startTime ve endTime alanları zorunludur"
-    );
+    throw new Error("Babysitter ID gerekli.");
   }
 
-  const newReq = await BookingRequest.create({
+  // Daha önce bekleyen bir istek var mı?
+  const alreadyExists = await BookingRequest.findOne({
     parent: req.user._id,
-    babysitter,
-    date,
-    startTime,
-    endTime,
+    babysitter: babysitterId,
+    status: "pending",
   });
 
-  // Oluşan kaydı dönerken populate edelim
-  const populated = await newReq
-    .populate("parent", "name email")
-    .populate("babysitter", "name email")
-    .execPopulate();
-
-  res.status(201).json(populated);
-});
-
-// @desc    Update an existing booking request
-// @route   PUT /api/booking-requests/:id
-// @access  Private
-exports.updateBookingRequest = asyncHandler(async (req, res) => {
-  const request = await BookingRequest.findById(req.params.id);
-  if (!request) {
-    res.status(404);
-    throw new Error("Booking request bulunamadı");
+  if (alreadyExists) {
+    res.status(400);
+    throw new Error("Zaten bekleyen bir isteğiniz var.");
   }
 
-  // İstendiği takdirde sadece durum vs. alanlarını güncelleyebilirsiniz
-  Object.assign(request, req.body);
-  const updated = await request.save();
+  const newBooking = await BookingRequest.create({
+    parent: req.user._id,
+    babysitter: babysitterId,
+    status: "pending",
+  });
 
-  const populated = await updated
-    .populate("parent", "name email")
-    .populate("babysitter", "name email")
-    .execPopulate();
+  // Parent adını al (bildirimde göstermek için)
+  const parentUser = await User.findById(req.user._id);
 
-  res.status(200).json(populated);
+  // Babysitter'a bildirim oluştur
+  await Notification.create({
+    user: babysitterId,
+    message: `You received a booking request from ${
+      parentUser?.name || "a parent"
+    }.`,
+    type: "booking",
+    isRead: false,
+  });
+
+  res.status(201).json(newBooking);
 });
 
-// @desc    Delete a booking request
-// @route   DELETE /api/booking-requests/:id
-// @access  Private
-exports.deleteBookingRequest = asyncHandler(async (req, res) => {
-  const request = await BookingRequest.findById(req.params.id);
-  if (!request) {
+// 2. Babysitter gelen booking isteklerini görür
+const getBabysitterBookings = asyncHandler(async (req, res) => {
+  const bookings = await BookingRequest.find({ babysitter: req.user._id })
+    .populate("parent", "name email")
+    .sort({ createdAt: -1 });
+
+  res.json(bookings);
+});
+
+// 3. Babysitter booking isteğini kabul/reddeder
+const respondBookingRequest = asyncHandler(async (req, res) => {
+  const { action } = req.body;
+  const booking = await BookingRequest.findById(req.params.id);
+
+  if (!booking) {
     res.status(404);
-    throw new Error("Booking request bulunamadı");
+    throw new Error("Booking bulunamadı.");
   }
 
-  await request.remove();
-  res.status(204).end();
+  if (booking.babysitter.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("Bu işlem için yetkiniz yok.");
+  }
+
+  if (!["accepted", "declined"].includes(action)) {
+    res.status(400);
+    throw new Error("Yanıt yalnızca 'accepted' veya 'declined' olabilir.");
+  }
+
+  booking.status = action;
+  await booking.save();
+
+  // Parent'a yanıt bildirimi gönder
+  await Notification.create({
+    user: booking.parent,
+    message: `Your booking request was ${action} by the babysitter.`,
+    type: "booking",
+    isRead: false,
+  });
+
+  res.json(booking);
 });
+
+module.exports = {
+  createBookingRequest,
+  getBabysitterBookings,
+  respondBookingRequest,
+};

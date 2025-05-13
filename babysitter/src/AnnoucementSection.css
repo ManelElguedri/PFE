@@ -1,116 +1,77 @@
+/* Container’ı ortala */
 .announcement-container {
-    text-align: center;
-    margin: 250px;
-  }
-  
-  .open-form-btn {
-    padding: 20px 15px;
-    background-color: #c71585;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .announcement-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .announcement-form label {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .announcement-form input,
-  .announcement-form textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .submit-btn {
-    padding: 8px;
-    background-color: #c71585;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .close-btn {
-    padding: 8px;
-    background-color: #808080;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .announcement-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
-    margin: 40px auto;
-  }
-  
-  .announcement-card {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-left: 6px solid #c71585;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    text-align: left;
-    position: relative;
-  }
-  
-  .announcement-card h3 {
-    margin: 0 0 10px;
-    color: #c71585;
-  }
-  
-  .announcement-card p {
-    margin: 4px 0;
-    color: #444;
-  }
-  
-  .edit-btn,
-  .delete-btn {
-    padding: 6px 12px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .edit-btn {
-    background-color: #ffa500;
-    color: white;
-  }
-  
-  .edit-btn:hover {
-    background-color: #e69500;
-  }
-  
-  .delete-btn {
-    background-color: #dc143c;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background-color: #b01030;
-  }
-  
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* Formu daralt, hafif gölge ve kenarlık ekle */
+.announcement-form {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  padding: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Label’leri blok haline getir */
+.announcement-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Tüm input & textarea’ları genişlet */
+.announcement-form input[type="text"],
+.announcement-form input[type="number"],
+.announcement-form input[type="file"],
+.announcement-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Textarea’yı dikey olarak yeniden boyanabilir yap */
+.announcement-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Buton ortak stilleri */
+.announcement-form .submit-btn,
+.announcement-form .close-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  box-sizing: border-box;
+}
+
+/* “Publish” butonu pembe */
+.announcement-form .submit-btn {
+  background-color: #e91e63;
+  color: #fff;
+}
+
+.announcement-form .submit-btn:hover {
+  background-color: #d81b60;
+}
+
+/* “Cancel” butonu hafif gri */
+.announcement-form .close-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.announcement-form .close-btn:hover {
+  background-color: #e0e0e0;
+}

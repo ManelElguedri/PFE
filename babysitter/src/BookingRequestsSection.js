@@ -1,6 +1,5 @@
-// src/components/RequestList.jsx
 import React, { useState, useEffect } from "react";
-import api from "./api"; // baseURL http://localhost:5000/api olarak tanımlı olmalı
+import api from "./api";
 import "./RequestList.css";
 
 function RequestList() {
@@ -23,6 +22,17 @@ function RequestList() {
     fetchRequests();
   }, []);
 
+  const respondToRequest = async (id, action) => {
+    try {
+      const res = await api.put(`/booking-requests/${id}`, { action });
+      setRequests((prev) =>
+        prev.map((r) => (r._id === id ? { ...r, status: res.data.status } : r))
+      );
+    } catch (err) {
+      console.error("Failed to update request:", err);
+    }
+  };
+
   if (loading) return <p>Loading requests…</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -34,10 +44,26 @@ function RequestList() {
       ) : (
         <ul>
           {requests.map((req) => (
-            <li key={req._id}>
-              <strong>{new Date(req.date).toLocaleDateString()}</strong> –{" "}
-              {req.parentName} requested from {req.startTime} to {req.endTime} (
-              {req.status})
+            <li key={req._id} className="request-item">
+              {req.createdAt
+                ? new Date(req.createdAt).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  })
+                : "N/A"}s
+              From: {req.parent?.name || req.parent?.email || "Unknown"} (
+              Status: {req.status})
+              {req.status === "pending" && (
+                <span className="action-buttons">
+                  <button onClick={() => respondToRequest(req._id, "accepted")}>
+                    Accept
+                  </button>
+                  <button onClick={() => respondToRequest(req._id, "declined")}>
+                    Decline
+                  </button>
+                </span>
+              )}
             </li>
           ))}
         </ul>

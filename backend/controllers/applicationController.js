@@ -1,30 +1,47 @@
 const asyncHandler = require("express-async-handler");
-const Application = require("../models/applicationModel");
+const Availability = require("../models/Availability");
 
-// @desc    Get all applications
-// @route   GET /api/applications
-// @access  Private (admin or babysitter)
-const getApplications = asyncHandler(async (req, res) => {
-  const apps = await Application.find()
-    .populate("babysitter", "name email") // babysitter adı ve e‑postası
-    .populate("announcement", "title date"); // duyuru başlığı ve tarihi
-  res.json(apps);
+// GET /api/availability
+exports.getAvailability = asyncHandler(async (req, res) => {
+  const list = await Availability.find({ babysitter: req.user._id });
+  res.json(list);
 });
 
-// @desc    Create new application
-// @route   POST /api/applications
-// @access  Private (babysitter)
-const createApplication = asyncHandler(async (req, res) => {
-  const { babysitter, announcement } = req.body;
-  if (!babysitter || !announcement) {
+// POST /api/availability
+exports.createAvailability = asyncHandler(async (req, res) => {
+  const { day, startTime, endTime } = req.body;
+  if (!day || !startTime || !endTime) {
     res.status(400);
-    throw new Error("babysitter ve announcement ID’leri gerekli");
+    throw new Error("`day`, `startTime` and `endTime` are required");
   }
-  const app = await Application.create({ babysitter, announcement });
-  res.status(201).json(app);
+  const avail = await Availability.create({
+    babysitter: req.user._id,
+    day,
+    startTime,
+    endTime,
+  });
+  res.status(201).json(avail);
 });
 
-module.exports = {
-  getApplications,
-  createApplication,
-};
+// PUT /api/availability/:id
+exports.updateAvailability = asyncHandler(async (req, res) => {
+  const avail = await Availability.findById(req.params.id);
+  if (!avail) {
+    res.status(404);
+    throw new Error("Availability not found");
+  }
+  Object.assign(avail, req.body);
+  const updated = await avail.save();
+  res.json(updated);
+});
+
+// DELETE /api/availability/:id
+exports.deleteAvailability = asyncHandler(async (req, res) => {
+  const avail = await Availability.findById(req.params.id);
+  if (!avail) {
+    res.status(404);
+    throw new Error("Availability not found");
+  }
+  await avail.remove();
+  res.status(204).end();
+});

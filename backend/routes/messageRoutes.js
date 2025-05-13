@@ -1,24 +1,12 @@
-// backend/routes/messageRoutes.js
 const express = require("express");
 const router = express.Router();
-const asyncHandler = require("express-async-handler");
 const {
+  sendMessage,
   getMessages,
-  createMessage,
-  markAsRead,
-  deleteMessage,
 } = require("../controllers/messageController");
+const { protect } = require("../middleware/authMiddleware");
 
-// /api/messages
-router
-  .route("/")
-  .get(asyncHandler(getMessages))
-  .post(asyncHandler(createMessage));
-
-// /api/messages/:id
-router
-  .route("/:id")
-  .put(asyncHandler(markAsRead))
-  .delete(asyncHandler(deleteMessage));
+router.post("/", protect, sendMessage); // POST /api/messages
+router.get("/:userId", protect, getMessages); // GET /api/messages/:userId
 
 module.exports = router;
